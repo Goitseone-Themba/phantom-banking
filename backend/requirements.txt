@@ -1,0 +1,4 @@
+Django
+djangoframework
+psycopg2-binary
+drf-yasg
