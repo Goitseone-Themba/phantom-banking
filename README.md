@@ -46,7 +46,7 @@ Edit
 ## 🚀 MVP Features
 
 - 🔐 Business dashboard to manage embedded wallets and transactions
-- 📲 Multi-channel payment support: QR, EFT (USSD optional in future)
+- 📲 Multi-channel payment support: QR, EFT 
 - 🧩 API & SDK for integration into POS systems or apps
 - 🆙 KYC upgrade path to transition wallets into full FNB accounts
 
@@ -64,7 +64,7 @@ Edit
 
 | Name              | Role                          | Skills                                       |
 |-------------------|-------------------------------|----------------------------------------------|
-| Goitseone Themba  | Project Lead / Fullstack      | React, APIs, DevOps, Architecture            |
+| Goitseone Themba  | Lead / Fullstack              | React, APIs, DevOps, Architecture            |
 | Bakang Kgopolo    | ML & Automation               | Python, ML, Instrumentation, Research        |
 | Thabo Mantsima    | Backend & Systems Integration | Django, Automation, Industrial Instrumentation|
 | Ernesto Mokgothu  | Data & Business Intelligence  | SQL, BI, Data Science, Design                |
@@ -79,14 +79,14 @@ Edit
 Clone the repository:
 
 ```bash
-git clone https://github.com/<your-org>/phantom-banking.git
+git clone https://github.com/Goitseone-Themba/phantom-banking.git
 cd phantom-banking
 ```
 📄 License
 This project is for educational and demo purposes for the FNB "Bank of the Future" Hackathon 2025. Commercial use requires approval from the core team and FNB Botswana.
 
 📫 Contact
-For questions or collaborations, reach out via GitHub issues or email: goitseone.themba@email.com (example).
+For questions or collaborations, reach out via GitHub issues or email: goitseonerozthemba@gmail.com .
 
 vbnet
 Copy
