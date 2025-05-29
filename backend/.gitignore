@@ -1,0 +1,72 @@
+# Phantom Banking MVP Backend .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Django
+*.log
+*.pot
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/static/
+/media/
+staticfiles/
+
+# Environment Variables
+.env
+.env.local
+*.env
+
+# Virtual Environment
+venv/
+env/
+.venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Logs
+logs/
+*.log
+
+# KYC Documents (sensitive)
+media/kyc_documents/*
+!media/kyc_documents/.gitkeep
+
+# Generated QR Codes
+media/qr_codes/*
+!media/qr_codes/.gitkeep
