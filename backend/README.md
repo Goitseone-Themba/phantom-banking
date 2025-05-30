@@ -189,12 +189,12 @@ POST /api/v1/mock-fnb/transactions/
 ```
 phantom_banking_backend/
 ├── phantom_banking/          # Django configuration
-├── apps/
+├── phantom_apps/
 │   ├── merchants/           # Business account management
 │   ├── wallets/             # Phantom wallet operations
 │   ├── transactions/        # Payment processing
 │   ├── customers/           # Customer management
-│   └── mock_fnb/            # Mock FNB API (development)
+│   └── mock_systems/        # Mock FNB API (development) / mobile_money API(optional)
 ├── api/v1/                  # API endpoints
 └── requirements.txt         # Dependencies
 ```
@@ -295,8 +295,8 @@ gunicorn phantom_banking.wsgi:application --bind 0.0.0.0:8000
 - JWT token authentication
 - Input validation and sanitization
 - CORS configuration for frontend integration
-- Secure file upload handling for KYC documents
-- Environment variable protection for API keys
+- Secure file upload handling for KYC documents (Optional)
+- Environment variable protection for API keys (Optional)
 
 ## 🧪 Testing
 
@@ -356,12 +356,11 @@ python manage.py loaddata tests/fixtures/transactions.json
 
 For questions, support, or collaboration opportunities regarding this project:
 
-**📧 Email**: [mantsimat@gmail.com](mailto:your-email@example.com)
+**📧 Email**: [mantsimat@gmail.com](mantsimat@gmail.com)
 
 Feel free to reach out for:
 - Technical questions about implementation
 - Collaboration opportunities
-- FNB Hackathon inquiries
 - Integration support
 - Feature requests or suggestions
 
