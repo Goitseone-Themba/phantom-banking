@@ -1,4 +1,43 @@
-Django
-djangoframework
-psycopg2-binary
-drf-yasg
+# Django and core dependencies
+Django>=5.2.6
+djangorestframework>=3.15.2
+djangorestframework-simplejwt>=5.3.0
+
+# Database (using psycopg3 for better performance)
+psycopg[binary]>=3.1.19
+psycopg2-binary>=2.9.9  # Fallback compatibility
+
+# Environment and configuration
+django-environ>=0.11.2
+
+# API and documentation
+drf-spectacular>=0.27.2
+django-cors-headers>=4.4.0
+
+# Redis and caching
+django-redis>=5.4.0
+redis>=5.0.8
+
+# Development tools
+django-extensions>=3.2.3
+
+# Testing
+pytest>=8.3.3
+pytest-django>=4.9.0
+factory-boy>=3.3.1
+pytest-cov>=5.0.0
+
+# Utilities
+Pillow>=10.4.0
+celery>=5.3.6
+
+# Production
+gunicorn>=22.0.0
+
+# Additional utilities for development
+ipython>=8.26.0
+django-debug-toolbar>=4.4.6
+
+# Security and validation
+django-filter>=24.3
+whitenoise>=6.7.0
