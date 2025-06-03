@@ -1,0 +1,20 @@
+digraph INFRA {
+  node [ color = "black", fillcolor = "#E6E6E6", height =1, style = "filled,bold,rounded", fontname = "Arial" ];
+  "PostgreSQL Database" [ label = "PostgreSQL Database
+(AWS::RDS::DBInstance)", shape =cylinder, fillcolor = "#FFCFB3" ];
+  "Django Backend" [ label = "Django Backend
+(AWS::ECS::Service)", shape =rectangle, fillcolor = "#B7E0FF" ];
+  "React Frontend" [ label = "React Frontend
+(AWS::S3::Bucket)", shape =cylinder, fillcolor = "#FFF5CD" ];
+  "API Gateway" [ label = "API Gateway
+(AWS::ApiGateway::RestApi)", shape =rectangle, fillcolor = "#E78F81" ];
+  "CloudFront Distribution" [ label = "CloudFront Distribution
+(AWS::CloudFront::Distribution)", shape =rectangle, fillcolor = "#E78F81" ];
+  "Cognito User Pool" [ label = "Cognito User Pool
+(AWS::Cognito::UserPool)", shape =rectangle ];
+  "Django Backend" -> "PostgreSQL Database";
+  "React Frontend" -> "Django Backend";
+  "API Gateway" -> "Django Backend";
+  "CloudFront Distribution" -> "React Frontend";
+  "CloudFront Distribution" -> "API Gateway";
+}
