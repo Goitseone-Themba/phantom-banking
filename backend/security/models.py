@@ -1,39 +1,44 @@
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
 
-class UserManager(BaseUserManager):
-    def create_user(self, username, email, password=None, **extra_fields):
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username, password=None, **extra_fields):
         if not username:
-            raise ValueError('The Username field must be set')
-        if not email:
-            raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
-        user = self.model(username=username, email=email, **extra_fields)
+            raise ValueError("Username is required")
+        user = self.model(username=username, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        user.save()
         return user
 
-    def create_superuser(self, username, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('role', 'admin')
-        return self.create_user(username, email, password, **extra_fields)
+    def create_superuser(self, username, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        return self.create_user(username, password, **extra_fields)
 
-class User(AbstractUser):
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (
+        ('admin', 'Admin'),
         ('merchant', 'Merchant'),
-        ('admin', 'Administrator'),
+        ('user', 'User'),
     )
-    
-    username = models.CharField('username', max_length=150, unique=True)
-    email = models.EmailField('email address', unique=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='merchant')
-    business_name = models.CharField(max_length=255, null=True, blank=True)
-    
+
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True, null=True, blank=True)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    profile_image = models.ImageField(upload_to='profiles/', null=True, blank=True)
+
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now_add=True)
+
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
-    
-    objects = UserManager()
-    
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
+
     def __str__(self):
         return self.username
