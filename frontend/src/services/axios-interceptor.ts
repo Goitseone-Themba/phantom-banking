@@ -34,7 +34,7 @@ axios.interceptors.response.use(
           axios.defaults.headers.common['Authorization'] = `Bearer ${response.access}`;
           return axios(originalRequest);
         }
-      } catch (error) {
+      } catch {
         authService.logout();
         window.location.href = '/login';
       }
