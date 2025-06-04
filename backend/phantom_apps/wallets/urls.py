@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
-=======
+
 from django.urls import path
 from . import views
 
@@ -34,4 +33,3 @@ urlpatterns = [
         name='verify_merchant_data_integrity'
     ),
 ]
->>>>>>> Stashed changes

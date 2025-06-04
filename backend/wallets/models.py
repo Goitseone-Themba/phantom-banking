@@ -25,7 +25,7 @@ class Wallet(models.Model):
     is_frozen = models.BooleanField(default=False)
     
     class Meta:
-        db_table = 'wallets'
+        db_table = 'wallets_alt'
         ordering = ['-created_at']
     
     def __str__(self):
