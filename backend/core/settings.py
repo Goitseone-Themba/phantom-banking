@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'phantom_apps.wallets',
     'phantom_apps.merchants',
     'phantom_apps.customers',
+    'phantom_apps.payments',
+    'phantom_apps.transactions',
 ]
 
 MIDDLEWARE = [
@@ -53,7 +55,7 @@ MIDDLEWARE = [
     'security.middleware.RequestLoggingMiddleware',
 ]
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {

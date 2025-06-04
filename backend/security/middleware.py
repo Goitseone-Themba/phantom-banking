@@ -5,7 +5,7 @@ from django.utils import timezone
 import re
 import json
 
-class SecurityMiddleware:
+class SecurityHeadersMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
         # Compile CSRF exempt URLs
@@ -83,6 +83,49 @@ class SecurityMiddleware:
         if x_forwarded_for:
             return x_forwarded_for.split(',')[0]
         return request.META.get('REMOTE_ADDR')
+
+
+class RequestLoggingMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Log request details
+        self._log_request_details(request)
+        
+        # Get response
+        response = self.get_response(request)
+        
+        # Log response details
+        self._log_response_details(response)
+        
+        return response
+    
+    def _log_request_details(self, request):
+        # Log basic request information
+        print(f"[Request] {request.method} {request.path}")
+        print(f"[Headers] {dict(request.headers)}")
+        print(f"[Query Params] {dict(request.GET)}")
+        
+        # For non-GET requests, log the body (if it's JSON)
+        if request.method != 'GET' and request.content_type == 'application/json':
+            try:
+                body = json.loads(request.body)
+                # Remove sensitive data
+                if 'password' in body:
+                    body['password'] = '******'
+                print(f"[Body] {body}")
+            except json.JSONDecodeError:
+                print("[Body] Invalid JSON")
+    
+    def _log_response_details(self, response):
+        print(f"[Response] Status: {response.status_code}")
+        if hasattr(response, 'content'):
+            try:
+                content = json.loads(response.content)
+                print(f"[Response Content] {content}")
+            except json.JSONDecodeError:
+                print("[Response Content] Non-JSON content")
 
 
 class AuditLogMiddleware:

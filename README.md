@@ -51,6 +51,16 @@ createdb phantom_banking2
 # Run migrations
 cd backend
 python manage.py migrate
+python manage.py migrate customers
+python manage.py migrate merchants
+python manage.py migrate transactions
+python manage.py migrate wallets
+
+# Note: Make sure to apply all migrations for the following apps:
+# - customers
+# - merchants
+# - transactions
+# - wallets
 ```
 
 4. Set up environment variables:
@@ -163,7 +173,8 @@ The application uses the following key infrastructure components:
 ### Security
 - JWT authentication with refresh token rotation
 - Security headers middleware
-- Request logging middleware
+- Request logging middleware (RequestLoggingMiddleware for detailed request/response logging)
+- Audit logging middleware (AuditLogMiddleware for security audit trails)
 - CORS configuration for frontend access
 - SSL/TLS settings for production
 
