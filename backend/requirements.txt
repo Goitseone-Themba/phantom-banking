@@ -5,7 +5,7 @@ djangorestframework-simplejwt>=5.3.0
 
 # Database (using psycopg3 for better performance)
 psycopg[binary]>=3.1.19
-psycopg2-binary>=2.9.9  # Fallback compatibility
+psycopg2-binary>=2.9.9
 
 # Environment and configuration
 django-environ>=0.11.2
@@ -27,8 +27,11 @@ pytest-django>=4.9.0
 factory-boy>=3.3.1
 pytest-cov>=5.0.0
 
-# Utilities
+# QR Code generation
+qrcode[pil]>=7.4.2
 Pillow>=10.4.0
+
+# Background tasks
 celery>=5.3.6
 
 # Production
@@ -41,3 +44,6 @@ django-debug-toolbar>=4.4.6
 # Security and validation
 django-filter>=24.3
 whitenoise>=6.7.0
+
+# HTTP requests (for bank API calls)
+requests>=2.31.0
