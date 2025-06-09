@@ -12,7 +12,12 @@ export function Home() {
     return (
         <SidebarProvider>
             <AppSidebar />
-            <main>
+            <main
+                style={{
+                    width: "-webkit-fill-available",
+                    height: "auto",
+                }}
+            >
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/wallets" element={<Wallets />} />
