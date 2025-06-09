@@ -1,8 +1,7 @@
 export function Transactions() {
-
     return (
         <>
-            <h1>Transaction</h1>
+            <h1>Transactions</h1>
         </>
-    )
+    );
 }
