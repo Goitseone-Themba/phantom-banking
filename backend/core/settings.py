@@ -35,11 +35,11 @@ INSTALLED_APPS = [
     # Local apps
     'security.apps.SecurityConfig',
     'phantom_apps.kyc',
-    'phantom_apps.wallets',
     'phantom_apps.merchants',
-    'phantom_apps.customers',
     'phantom_apps.payments',
     'phantom_apps.transactions',
+    'phantom_apps.customers',
+    'wallets',
 ]
 
 MIDDLEWARE = [
