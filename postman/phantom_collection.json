@@ -31,6 +31,27 @@
           }
         },
         {
+          "name": "Register Merchant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/merchant-signup/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "merchant-signup"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"merchant1\",\n    \"password\": \"merchant123\",\n    \"password2\": \"merchant123\",\n    \"email\": \"merchant@example.com\",\n    \"first_name\": \"Merchant\",\n    \"last_name\": \"User\",\n    \"phone_number\": \"+1234567890\",\n    \"business_name\": \"Test Business\",\n    \"registration_number\": \"REG123456\",\n    \"business_type\": \"retail\"\n}"
+            }
+          }
+        },
+        {
           "name": "Login",
           "request": {
             "method": "POST",
@@ -47,7 +68,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"testpass123\"\n}"
+              "raw": "{\n    \"username_or_email\": \"testuser\",\n    \"password\": \"testpass123\"\n}"
             }
           }
         },
@@ -71,6 +92,90 @@
               "raw": "{\n    \"refresh\": \"{{refresh_token}}\"\n}"
             }
           }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "logout"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/verify-email/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "verify-email"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\": \"{{verification_token}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Request Password Reset",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/request-password-reset/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "request-password-reset"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"test@example.com\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/reset-password/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "reset-password"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\": \"{{reset_token}}\",\n    \"new_password\": \"newpass123\"\n}"
+            }
+          }
         }
       ]
     },
@@ -78,7 +183,7 @@
       "name": "Wallets",
       "item": [
         {
-          "name": "Create Wallet",
+          "name": "Create Wallet Request",
           "request": {
             "method": "POST",
             "header": [
@@ -92,13 +197,64 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/wallets/",
+              "raw": "{{base_url}}/api/wallet-requests/",
               "host": ["{{base_url}}"],
-              "path": ["api", "wallets"]
+              "path": ["api", "wallet-requests"]
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"user_id\": \"123\",\n    \"merchant_id\": \"456\",\n    \"wallet_type\": \"basic\"\n}"
+              "raw": "{\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone_number\": \"+1234567890\",\n    \"national_id\": \"ID123456\",\n    \"date_of_birth\": \"1990-01-01\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Wallet Requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wallet-requests/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet-requests"]
+            }
+          }
+        },
+        {
+          "name": "Approve Wallet Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wallet-requests/{{request_id}}/approve/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet-requests", "{{request_id}}", "approve"]
+            }
+          }
+        },
+        {
+          "name": "Reject Wallet Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wallet-requests/{{request_id}}/reject/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet-requests", "{{request_id}}", "reject"]
             }
           }
         },
