@@ -1,0 +1,77 @@
+from django.db import models
+from django.utils import timezone
+from decimal import Decimal
+import uuid
+
+class WalletCreationRequest(models.Model):
+    """Model to track wallet creation requests from trusted merchants"""
+    
+    request_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    merchant = models.ForeignKey('merchants.Merchant', on_delete=models.CASCADE)
+    
+    # Customer Details
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+    national_id = models.CharField(max_length=20)
+    date_of_birth = models.DateField()
+    
+    # Metadata
+    created_at = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return f"Wallet Request {self.request_id} - {self.first_name} {self.last_name}"
+    
+    def send_notification_email(self):
+        """Send notification email to customer about wallet creation"""
+        from django.core.mail import send_mail
+        from django.template.loader import render_to_string
+        from django.utils.html import strip_tags
+        from django.conf import settings
+        
+        context = {
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'merchant_name': self.merchant.business_name,
+            'created_at': self.created_at
+        }
+        
+        html_message = render_to_string('wallets/email/wallet_creation.html', context)
+        plain_message = strip_tags(html_message)
+        
+        send_mail(
+            subject='Your Wallet Has Been Created',
+            message=plain_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[self.email],
+            html_message=html_message
+        )
+
+class Wallet(models.Model):
+    """Phantom wallet model"""
+    
+    wallet_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    customer = models.OneToOneField('customers.Customer', on_delete=models.CASCADE, related_name='wallet')
+    merchant = models.ForeignKey('merchants.Merchant', on_delete=models.CASCADE, related_name='wallets')
+    
+    # Balance and currency
+    balance = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal('0.00'))
+    currency = models.CharField(max_length=3, default='BWP')
+    
+    # Limits
+    daily_limit = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal('50000.00'))
+    monthly_limit = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal('200000.00'))
+    
+    # Status and metadata
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=20, default='active')
+    is_frozen = models.BooleanField(default=False)
+    
+    class Meta:
+        db_table = 'wallets'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Wallet {self.wallet_id} - {self.customer.first_name} {self.customer.last_name}"

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wallet Created Successfully</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .success-banner {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .details {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to Your New Wallet!</h2>
+        
+        <p>Dear {{ first_name }} {{ last_name }},</p>
+        
+        <div class="success-banner">
+            Your wallet has been created successfully!
+        </div>
+        
+        <p>We're pleased to inform you that your wallet with {{ merchant_name }} has been created and is ready to use.</p>
+        
+        <div class="details">
+            <p><strong>Created On:</strong> {{ created_at|date:"F j, Y H:i" }}</p>
+            <p><strong>Merchant:</strong> {{ merchant_name }}</p>
+        </div>
+        
+        <p>You can now log in to access your wallet and start using our services.</p>
+        
+        <p>If you have any questions about using your wallet, please don't hesitate to contact our support team.</p>
+        
+        <p>Best regards,<br>The Wallet Team</p>
+    </div>
+</body>
+</html>
