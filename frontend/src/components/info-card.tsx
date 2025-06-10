@@ -1,5 +1,3 @@
-import React from "react";
-
 export function InfoCard({ title, value }: { title: string; value: string }) {
     return (
         <>
