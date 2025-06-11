@@ -1,0 +1,25 @@
+<!-- backend/templates/kyc/emails/approval.txt -->
+KYC Verification Approved - Phantom Banking
+
+Hello {{ user.first_name }},
+
+Great news! Your identity verification has been successfully completed and approved.
+
+Verification Details:
+- Name: {{ kyc_record.first_name }} {{ kyc_record.last_name }}
+- Verification Level: {{ kyc_record.verification_level|title }}
+- Approved: {{ kyc_record.verified_at|date:"F d, Y at g:i A" }}
+
+What's Next?
+- Your wallet has been upgraded with higher transaction limits
+- You now have access to premium features
+- You can send and receive larger amounts
+- Enhanced security features are now available
+
+Access your dashboard: {{ dashboard_url }}
+
+Thank you for choosing Phantom Banking. If you have any questions, please contact our support team.
+
+---
+This is an automated message from Phantom Banking System.
+Please do not reply to this email.

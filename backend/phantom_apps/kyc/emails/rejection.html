@@ -1,0 +1,67 @@
+<!-- backend/templates/kyc/emails/rejection.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC Verification Update</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; }
+        .warning-icon { font-size: 4rem; margin-bottom: 20px; }
+        .button { display: inline-block; background: #3498db; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+        .support-button { background: #f39c12; }
+        .footer { text-align: center; margin-top: 30px; color: #6c757d; font-size: 14px; }
+        .reason-box { background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 6px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="warning-icon">⚠️</div>
+            <h1>Verification Update</h1>
+        </div>
+        
+        <div class="content">
+            <h2>Hello {{ user.first_name }},</h2>
+            
+            <p>We've completed the review of your identity verification documents. Unfortunately, we were unable to verify your identity at this time.</p>
+            
+            {% if reason %}
+            <div class="reason-box">
+                <strong>Reason:</strong> {{ reason }}
+            </div>
+            {% endif %}
+            
+            <p><strong>What can you do?</strong></p>
+            <ul>
+                <li>Review the reason above and ensure your documents meet our requirements</li>
+                <li>Submit new, clear photos of your documents</li>
+                <li>Ensure all information is clearly visible and matches your account details</li>
+                <li>Contact our support team if you need assistance</li>
+            </ul>
+            
+            <p><strong>Document Requirements:</strong></p>
+            <ul>
+                <li>Government-issued photo ID (passport, national ID, or driver's license)</li>
+                <li>Clear, high-resolution images</li>
+                <li>All corners and edges visible</li>
+                <li>No glare or shadows</li>
+                <li>Information must be clearly readable</li>
+            </ul>
+            
+            <a href="{{ retry_url }}" class="button">Try Again</a>
+            <a href="{{ support_url }}" class="button support-button">Contact Support</a>
+            
+            <p>We're here to help you complete your verification. Please don't hesitate to reach out if you have any questions.</p>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated message from Phantom Banking System.<br>
+            Please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!-- backend/templates/kyc/emails/approval.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC Verification Approved</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; }
+        .success-icon { font-size: 4rem; margin-bottom: 20px; }
+        .button { display: inline-block; background: #27ae60; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+        .footer { text-align: center; margin-top: 30px; color: #6c757d; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="success-icon">✅</div>
+            <h1>Verification Complete!</h1>
+        </div>
+        
+        <div class="content">
+            <h2>Hello {{ user.first_name }},</h2>
+            
+            <p>Great news! Your identity verification has been successfully completed and approved.</p>
+            
+            <p><strong>Verification Details:</strong></p>
+            <ul>
+                <li>Name: {{ kyc_record.first_name }} {{ kyc_record.last_name }}</li>
+                <li>Verification Level: {{ kyc_record.verification_level|title }}</li>
+                <li>Approved: {{ kyc_record.verified_at|date:"F d, Y at g:i A" }}</li>
+            </ul>
+            
+            <p><strong>What's Next?</strong></p>
+            <ul>
+                <li>Your wallet has been upgraded with higher transaction limits</li>
+                <li>You now have access to premium features</li>
+                <li>You can send and receive larger amounts</li>
+                <li>Enhanced security features are now available</li>
+            </ul>
+            
+            <a href="{{ dashboard_url }}" class="button">Access Your Dashboard</a>
+            
+            <p>Thank you for choosing Phantom Banking. If you have any questions, please don't hesitate to contact our support team.</p>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated message from Phantom Banking System.<br>
+            Please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>

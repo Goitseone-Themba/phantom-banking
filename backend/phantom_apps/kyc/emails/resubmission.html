@@ -1,0 +1,56 @@
+<!-- backend/templates/kyc/emails/resubmission.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Additional Information Required</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #f39c12, #d68910); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; }
+        .info-icon { font-size: 4rem; margin-bottom: 20px; }
+        .button { display: inline-block; background: #3498db; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+        .footer { text-align: center; margin-top: 30px; color: #6c757d; font-size: 14px; }
+        .reason-box { background: #e8f4fd; border: 1px solid #b8daff; padding: 15px; border-radius: 6px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="info-icon">📋</div>
+            <h1>Additional Information Required</h1>
+        </div>
+        
+        <div class="content">
+            <h2>Hello {{ user.first_name }},</h2>
+            
+            <p>Thank you for submitting your verification documents. We need some additional information to complete your identity verification.</p>
+            
+            {% if reason %}
+            <div class="reason-box">
+                <strong>What we need:</strong> {{ reason }}
+            </div>
+            {% endif %}
+            
+            <p><strong>Next Steps:</strong></p>
+            <ul>
+                <li>Click the button below to continue your verification</li>
+                <li>Follow the instructions carefully</li>
+                <li>Ensure all documents are clear and readable</li>
+                <li>Submit the additional information requested</li>
+            </ul>
+            
+            <a href="{{ retry_url }}" class="button">Continue Verification</a>
+            
+            <p>If you have any questions about the verification process, please contact our support team. We're here to help!</p>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated message from Phantom Banking System.<br>
+            Please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>

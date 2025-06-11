@@ -1,0 +1,1 @@
+default_app_config = 'phantom_apps.kyc.apps.KycConfig'
