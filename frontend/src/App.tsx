@@ -4,6 +4,8 @@ import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { Businesses } from "./pages/admin/Businesses";
 import { Home } from "./pages/Home";
 import { About } from "./pages/About";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { SignUp } from "./pages/SignUp";
 function App() {
     return (
         <Router>
@@ -11,6 +13,8 @@ function App() {
                 <Route path="*" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="forgotpassword" element={<ForgotPassword />} />
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
                 <Route path="/admin/businesses" element={<Businesses />} />
             </Routes>
