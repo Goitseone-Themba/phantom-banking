@@ -110,7 +110,7 @@ export function WalletTable() {
                     </tbody>
                     <tfoot>
                         <tr className="border-b font-medium [&>td]:last:border-b-0">
-                            <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0" colSpan="3">
+                            <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0" colSpan={3}>
                                 Total
                             </td>
                             <td className="p-4 text-right align-middle [&:has([role=checkbox])]:pr-0">

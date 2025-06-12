@@ -13,6 +13,15 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export function EftPayment() {
     const [accountNumber, setAccountNumber] = useState("");
@@ -20,27 +29,6 @@ export function EftPayment() {
     const [amountDue, setAmountDue] = useState("");
     const [shouldErrorDialogOpen, setErrorDialogToOpen] = useState(false);
     const [eftError, setEFTError] = useState("");
-
-    const [filteredBanks, setFilteredBanks] = useState([]);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedIndex, setSelectedIndex] = useState(-1);
-    const bankInputRef = useRef(null);
-    const dropdownRef = useRef(null);
-
-    const banks = [
-        "Absa Bank",
-        "FNB (First National Bank)",
-        "BBS (Botswana Building Society)",
-        "Standard Bank",
-        "Nedbank",
-        "Capitec Bank",
-        "African Bank",
-        "Discovery Bank",
-        "TymeBank",
-        "Bank Zero",
-        "Investec",
-        "Bidvest Bank",
-    ];
 
     const startEFTTransaction = function (e: any) {
         e ? e.preventDefault() : null;
@@ -51,73 +39,6 @@ export function EftPayment() {
         setErrorDialogToOpen(true);
         setEFTError("invalid card number");
     };
-
-    useEffect(() => {
-        if (bankName.trim() === "") {
-            setFilteredBanks([]);
-            setShowDropdown(false);
-            return;
-        }
-
-        const filtered = banks.filter((bank) => bank.toLowerCase().includes(bankName.toLowerCase()));
-
-        setFilteredBanks(filtered);
-        setShowDropdown(filtered.length > 0);
-        setSelectedIndex(-1);
-    }, [bankName]);
-
-    const handleBankSelect = (bank: string) => {
-        setBankName(bank);
-        setShowDropdown(false);
-        setSelectedIndex(-1);
-        //@ts-ignore
-        bankInputRef.current?.focus();
-    };
-
-    // Handle keyboard navigation
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (!showDropdown) return;
-
-        switch (e.key) {
-            case "ArrowDown":
-                e.preventDefault();
-                setSelectedIndex((prev) => (prev < filteredBanks.length - 1 ? prev + 1 : prev));
-                break;
-            case "ArrowUp":
-                e.preventDefault();
-                setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
-                break;
-            case "Enter":
-                e.preventDefault();
-                if (selectedIndex >= 0) {
-                    handleBankSelect(filteredBanks[selectedIndex]);
-                }
-                break;
-            case "Escape":
-                setShowDropdown(false);
-                setSelectedIndex(-1);
-                break;
-        }
-    };
-
-    // Handle clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            const target = event.target as Node;
-            if (
-                bankInputRef.current &&
-                !bankInputRef.current.contains(target) &&
-                dropdownRef.current &&
-                !dropdownRef.current.contains(target)
-            ) {
-                setShowDropdown(false);
-                setSelectedIndex(-1);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
 
     return (
         <form onSubmit={startEFTTransaction}>
@@ -140,41 +61,29 @@ export function EftPayment() {
                             />
 
                             <Label>Bank Name</Label>
-                            <div className="relative">
-                                <Input
-                                    ref={bankInputRef}
-                                    value={bankName}
-                                    onChange={(e) => {
-                                        setBankName(e.target.value);
-                                    }}
-                                    onKeyDown={handleKeyDown}
-                                    required
-                                    type="text"
-                                    placeholder="Bank Name"
-                                    autoComplete="off"
-                                />
 
-                                {showDropdown && (
-                                    <div
-                                        ref={dropdownRef}
-                                        className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
-                                    >
-                                        {filteredBanks.map((bank, index) => (
-                                            <div
-                                                key={bank}
-                                                onClick={() => handleBankSelect(bank)}
-                                                className={`px-4 py-2 cursor-pointer hover:bg-blue-50 ${
-                                                    index === selectedIndex
-                                                        ? "bg-blue-100 text-blue-900"
-                                                        : "text-gray-900"
-                                                }`}
-                                            >
-                                                {bank}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                            <Select
+                                defaultValue="First National Bank (FNB)"
+                                onValueChange={(value) => {
+                                    setBankName(value);
+                                }}
+                            >
+                                <SelectTrigger className="w-auto">
+                                    <SelectValue placeholder="Select a Bank" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Select a Bank</SelectLabel>
+                                        <SelectItem value="First National Bank (FNB)">
+                                            First National Bank (FNB)
+                                        </SelectItem>
+                                        <SelectItem value="ABSA Bank">ABSA Bank</SelectItem>
+                                        <SelectItem value="Standard Bank">Standard Bank</SelectItem>
+                                        <SelectItem value="NedBank">NedBank</SelectItem>
+                                        <SelectItem value="Capitec Bank">Capitec Bank</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
 
                             <Label>Amount to be paid</Label>
                             <Input
