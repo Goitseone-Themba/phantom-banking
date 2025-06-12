@@ -308,15 +308,92 @@ The merchants module manages merchant accounts and their API access.
 
 ## Testing
 
-Each module includes comprehensive tests:
+### Unit and Integration Tests
 
-- **Security Tests**: Authentication, password management, and middleware
-- **Wallet Tests**: Creation, transactions, and limits
-- **Merchant Tests**: Registration, API credentials, and wallet creation
-
-Run tests with:
+Run Django tests with:
 ```bash
 python manage.py test security
 python manage.py test wallets
 python manage.py test phantom_apps.merchants
 ```
+
+### Postman Testing
+
+The project includes Postman collections for API testing in the `/postman` directory:
+
+#### Authentication Collection
+- **Merchant Registration**: `POST /api/auth/merchant_signup/`
+  - Tests merchant account creation
+  - Validates business information requirements
+  - Note: `admin_email` is used as the login email and `admin_name` is used as the username
+  - Example request:
+    ```json
+    {
+        "business_name": "Test Business",
+        "registration_number": "REG123456",
+        "contact_email": "business@example.com",
+        "contact_phone": "+1234567890",
+        "admin_name": "merchant_admin",
+        "admin_email": "admin@testbusiness.com",
+        "password": "SecurePass123!",
+        "confirm_password": "SecurePass123!"
+    }
+    ```
+
+- **Merchant Login**: `POST /api/auth/login/`
+  - Tests JWT token issuance
+  - Validates proper error handling for invalid credentials
+  - Can use either admin_email or admin_name (username) for login
+  - Example request:
+    ```json
+    {
+        "username_or_email": "admin@testbusiness.com",
+        "password": "SecurePass123!"
+    }
+    ```
+  - Alternative login using admin_name:
+    ```json
+    {
+        "username_or_email": "merchant_admin",
+        "password": "SecurePass123!"
+    }
+    ```
+
+- **Token Refresh**: `POST /api/token/refresh/`
+  - Tests refresh token rotation
+  - Validates token expiration handling
+
+#### Wallet Creation Collection
+- **Create Wallet Request**: `POST /api/wallet-management/wallet-creation/`
+  - Tests validation of customer data
+  - Verifies proper error handling for duplicate information
+  - Example request:
+    ```json
+    {
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@example.com",
+        "phone_number": "+1234567890",
+        "national_id": "ID123456",
+        "date_of_birth": "1990-01-01",
+        "username": "john_doe123"
+    }
+    ```
+
+- **Approve Wallet Request**: `POST /api/wallet-management/wallet-creation/{request_id}/approve/`
+  - Tests wallet creation process
+  - Verifies user account creation
+  - Validates email notification
+
+- **Reject Wallet Request**: `POST /api/wallet-management/wallet-creation/{request_id}/reject/`
+  - Tests rejection workflow
+  - Verifies status updates
+
+#### Merchant API Collection
+- **Generate API Key**: `POST /api/merchants/api-credentials/generate/`
+  - Tests API key generation
+  - Validates permission settings
+
+- **Create Customer Wallet**: `POST /api/merchants/merchants/{merchant_id}/create_wallet/`
+  - Tests merchant-initiated wallet creation
+  - Validates proper linking between merchant and wallet
