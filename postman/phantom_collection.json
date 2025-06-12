@@ -2,12 +2,12 @@
   "info": {
     "_postman_id": "1234-5678-abcd-efgh",
     "name": "Phantom Banking API",
-    "description": "Collection for testing Phantom Banking API endpoints",
+    "description": "Collection for testing security, merchants, and wallets functionality",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Authentication",
+      "name": "Security",
       "item": [
         {
           "name": "Register User",
@@ -26,12 +26,13 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"testpass123\",\n    \"password2\": \"testpass123\",\n    \"email\": \"test@example.com\",\n    \"first_name\": \"Test\",\n    \"last_name\": \"User\",\n    \"phone_number\": \"+1234567890\",\n    \"date_of_birth\": \"1990-01-01\"\n}"
-            }
+              "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"testpass123\",\n    \"email\": \"test@example.com\",\n    \"first_name\": \"Test\",\n    \"last_name\": \"User\",\n    \"phone_number\": \"+1234567890\",\n    \"national_id\": \"ID123456\",\n    \"date_of_birth\": \"1990-01-01\"\n}"
+            },
+            "description": "Register a new regular user"
           }
         },
         {
-          "name": "Register Merchant",
+          "name": "Merchant Signup",
           "request": {
             "method": "POST",
             "header": [
@@ -41,14 +42,15 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/auth/merchant-signup/",
+              "raw": "{{base_url}}/api/auth/merchant_signup/",
               "host": ["{{base_url}}"],
-              "path": ["api", "auth", "merchant-signup"]
+              "path": ["api", "auth", "merchant_signup"]
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"merchant1\",\n    \"password\": \"merchant123\",\n    \"password2\": \"merchant123\",\n    \"email\": \"merchant@example.com\",\n    \"first_name\": \"Merchant\",\n    \"last_name\": \"User\",\n    \"phone_number\": \"+1234567890\",\n    \"business_name\": \"Test Business\",\n    \"registration_number\": \"REG123456\",\n    \"business_type\": \"retail\"\n}"
-            }
+              "raw": "{\n    \"username\": \"merchant1\",\n    \"password\": \"merchant123\",\n    \"email\": \"merchant@example.com\",\n    \"first_name\": \"Merchant\",\n    \"last_name\": \"User\",\n    \"phone_number\": \"+1234567890\",\n    \"national_id\": \"ID123456\",\n    \"date_of_birth\": \"1990-01-01\",\n    \"business_name\": \"Test Business\",\n    \"registration_number\": \"REG123456\",\n    \"contact_email\": \"business@example.com\",\n    \"contact_phone\": \"+1234567890\"\n}"
+            },
+            "description": "Register a new merchant account"
           }
         },
         {
@@ -68,50 +70,9 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username_or_email\": \"testuser\",\n    \"password\": \"testpass123\"\n}"
-            }
-          }
-        },
-        {
-          "name": "Refresh Token",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/auth/refresh/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "auth", "refresh"]
+              "raw": "{\n    \"username_or_email\": \"merchant1\",\n    \"password\": \"merchant123\"\n}"
             },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"refresh\": \"{{refresh_token}}\"\n}"
-            }
-          }
-        },
-        {
-          "name": "Logout",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/auth/logout/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "auth", "logout"]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}"
-            }
+            "description": "Login to get access and refresh tokens"
           }
         },
         {
@@ -125,18 +86,19 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/auth/verify-email/",
+              "raw": "{{base_url}}/api/auth/verify_email/",
               "host": ["{{base_url}}"],
-              "path": ["api", "auth", "verify-email"]
+              "path": ["api", "auth", "verify_email"]
             },
             "body": {
               "mode": "raw",
               "raw": "{\n    \"token\": \"{{verification_token}}\"\n}"
-            }
+            },
+            "description": "Verify email address with token sent to email"
           }
         },
         {
-          "name": "Request Password Reset",
+          "name": "Token Refresh",
           "request": {
             "method": "POST",
             "header": [
@@ -146,42 +108,85 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/auth/request-password-reset/",
+              "raw": "{{base_url}}/api/token/refresh/",
               "host": ["{{base_url}}"],
-              "path": ["api", "auth", "request-password-reset"]
+              "path": ["api", "token", "refresh"]
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"test@example.com\"\n}"
-            }
+              "raw": "{\n    \"refresh\": \"{{refresh_token}}\"\n}"
+            },
+            "description": "Get a new access token using refresh token"
           }
         },
         {
-          "name": "Reset Password",
+          "name": "Logout",
           "request": {
             "method": "POST",
             "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/auth/reset-password/",
+              "raw": "{{base_url}}/api/auth/logout/",
               "host": ["{{base_url}}"],
-              "path": ["api", "auth", "reset-password"]
+              "path": ["api", "auth", "logout"]
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"token\": \"{{reset_token}}\",\n    \"new_password\": \"newpass123\"\n}"
-            }
+              "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}"
+            },
+            "description": "Logout and invalidate refresh token"
           }
         }
-      ]
+      ],
+      "description": "Security and authentication endpoints"
     },
     {
-      "name": "Wallets",
+      "name": "Merchants",
       "item": [
+        {
+          "name": "Get Merchant Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/merchants/merchant-accounts/profile/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "merchants", "merchant-accounts", "profile"]
+            },
+            "description": "Get the merchant profile for the authenticated user"
+          }
+        },
+        {
+          "name": "Get Merchant Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/merchants/merchants/{{merchant_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "merchants", "merchants", "{{merchant_id}}"]
+            },
+            "description": "Get details for a specific merchant"
+          }
+        },
         {
           "name": "Create Wallet Request",
           "request": {
@@ -197,18 +202,51 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/wallet-requests/",
+              "raw": "{{base_url}}/api/merchants/merchants/{{merchant_id}}/create_wallet_request/",
               "host": ["{{base_url}}"],
-              "path": ["api", "wallet-requests"]
+              "path": ["api", "merchants", "merchants", "{{merchant_id}}", "create_wallet_request"]
             },
             "body": {
               "mode": "raw",
               "raw": "{\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone_number\": \"+1234567890\",\n    \"national_id\": \"ID123456\",\n    \"date_of_birth\": \"1990-01-01\"\n}"
-            }
+            },
+            "description": "Create a wallet request for a customer through the merchant"
           }
         },
         {
-          "name": "List Wallet Requests",
+          "name": "Create Customer Wallet",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/merchants/merchants/{{merchant_id}}/create_wallet/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "merchants", "merchants", "{{merchant_id}}", "create_wallet"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"customer_name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone_number\": \"+1234567890\",\n    \"initial_balance\": 100.00\n}"
+            },
+            "description": "Create a wallet directly for a customer"
+          }
+        }
+      ],
+      "description": "Merchant management endpoints"
+    },
+    {
+      "name": "Wallets",
+      "item": [
+        {
+          "name": "List Wallets",
           "request": {
             "method": "GET",
             "header": [
@@ -218,44 +256,11 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/wallet-requests/",
+              "raw": "{{base_url}}/api/wallet-management/wallets/",
               "host": ["{{base_url}}"],
-              "path": ["api", "wallet-requests"]
-            }
-          }
-        },
-        {
-          "name": "Approve Wallet Request",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{access_token}}"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/wallet-requests/{{request_id}}/approve/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "wallet-requests", "{{request_id}}", "approve"]
-            }
-          }
-        },
-        {
-          "name": "Reject Wallet Request",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{access_token}}"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/wallet-requests/{{request_id}}/reject/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "wallet-requests", "{{request_id}}", "reject"]
-            }
+              "path": ["api", "wallet-management", "wallets"]
+            },
+            "description": "List all wallets for the authenticated user"
           }
         },
         {
@@ -269,14 +274,15 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/wallets/{{wallet_id}}/",
+              "raw": "{{base_url}}/api/wallet-management/wallets/{{wallet_id}}/",
               "host": ["{{base_url}}"],
-              "path": ["api", "wallets", "{{wallet_id}}"]
-            }
+              "path": ["api", "wallet-management", "wallets", "{{wallet_id}}"]
+            },
+            "description": "Get details for a specific wallet"
           }
         },
         {
-          "name": "List Merchant Wallets",
+          "name": "List Wallet Creation Requests",
           "request": {
             "method": "GET",
             "header": [
@@ -286,14 +292,15 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/merchants/{{merchant_id}}/wallets/",
+              "raw": "{{base_url}}/api/wallet-management/wallet-requests/",
               "host": ["{{base_url}}"],
-              "path": ["api", "merchants", "{{merchant_id}}", "wallets"]
-            }
+              "path": ["api", "wallet-management", "wallet-requests"]
+            },
+            "description": "List all wallet creation requests for the merchant"
           }
         },
         {
-          "name": "Block Wallet",
+          "name": "Approve Wallet Creation Request",
           "request": {
             "method": "POST",
             "header": [
@@ -303,147 +310,15 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/api/wallets/{{wallet_id}}/block/",
+              "raw": "{{base_url}}/api/wallet-management/wallet-requests/{{request_id}}/approve/",
               "host": ["{{base_url}}"],
-              "path": ["api", "wallets", "{{wallet_id}}", "block"]
-            }
+              "path": ["api", "wallet-management", "wallet-requests", "{{request_id}}", "approve"]
+            },
+            "description": "Approve a wallet creation request"
           }
         }
-      ]
-    },
-    {
-      "name": "KYC",
-      "item": [
-        {
-          "name": "Submit KYC Documents",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{access_token}}"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/kyc/submit/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "kyc", "submit"]
-            },
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "document_type",
-                  "value": "id_document",
-                  "type": "text"
-                },
-                {
-                  "key": "document_file",
-                  "type": "file",
-                  "src": []
-                }
-              ]
-            }
-          }
-        },
-        {
-          "name": "Verify KYC Document",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{access_token}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/kyc/{{kyc_id}}/verify/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "kyc", "{{kyc_id}}", "verify"]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"status\": \"verified\",\n    \"verification_notes\": \"Documents verified successfully\"\n}"
-            }
-          }
-        },
-        {
-          "name": "Request FNB Account Conversion",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{access_token}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/kyc/fnb-conversion/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "kyc", "fnb-conversion"]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"wallet_id\": \"{{wallet_id}}\",\n    \"kyc_verification_id\": \"{{kyc_id}}\"\n}"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Merchants",
-      "item": [
-        {
-          "name": "Register Merchant",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{access_token}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/merchants/register/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "merchants", "register"]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"business_name\": \"Test Business\",\n    \"registration_number\": \"REG123456\",\n    \"business_type\": \"retail\",\n    \"contact_email\": \"business@example.com\",\n    \"contact_phone\": \"+1234567890\",\n    \"address\": \"123 Business St\"\n}"
-            }
-          }
-        },
-        {
-          "name": "List Merchant Customers",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{access_token}}"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/merchants/{{merchant_id}}/customers/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "merchants", "{{merchant_id}}", "customers"]
-            }
-          }
-        }
-      ]
+      ],
+      "description": "Wallet management endpoints"
     }
   ],
   "variable": [

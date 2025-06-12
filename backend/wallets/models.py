@@ -8,8 +8,16 @@ import uuid
 class WalletCreationRequest(models.Model):
     """Model to track wallet creation requests from trusted merchants"""
     
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    )
+    
     request_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    merchant = models.ForeignKey('merchants.Merchant', on_delete=models.CASCADE)
+    merchant = models.ForeignKey('merchants.Merchant', on_delete=models.CASCADE, related_name='wallet_requests')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='approved')
+    processed_at = models.DateTimeField(null=True, blank=True)
     
     # Customer Details
     first_name = models.CharField(max_length=150)
@@ -18,6 +26,7 @@ class WalletCreationRequest(models.Model):
     phone_number = models.CharField(max_length=20)
     national_id = models.CharField(max_length=20)
     date_of_birth = models.DateField()
+    username = models.CharField(max_length=150, null=True, blank=True)
     
     # Metadata
     created_at = models.DateTimeField(default=timezone.now)
@@ -37,14 +46,20 @@ class WalletCreationRequest(models.Model):
             'last_name': self.last_name,
             'merchant_name': self.merchant.business_name,
             'created_at': self.created_at,
-            'status': 'active'  # Added to indicate wallet is active
+            'status': self.status
         }
         
-        html_message = render_to_string('wallets/email/wallet_creation.html', context)
+        html_message = render_to_string('email/wallet_creation.html', context)
         plain_message = strip_tags(html_message)
         
+        subject = 'Your Wallet Request Status'
+        if self.status == 'approved':
+            subject = 'Your Wallet Has Been Created'
+        elif self.status == 'rejected':
+            subject = 'Your Wallet Request Has Been Declined'
+        
         send_mail(
-            subject='Your Active Wallet Has Been Created',  # Updated subject to indicate active status
+            subject=subject,
             message=plain_message,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[self.email],
@@ -67,7 +82,7 @@ class Wallet(models.Model):
     # Core Fields
     wallet_id = models.CharField(max_length=50, unique=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='wallets')
-    merchant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='merchant_wallets')
+    merchant = models.ForeignKey('merchants.Merchant', on_delete=models.PROTECT, related_name='wallets', null=True, default=None)
     balance = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal('0.00'), validators=[MinValueValidator(Decimal('0.00'))])
     
     # Status and Type
@@ -97,6 +112,11 @@ class Wallet(models.Model):
 
     def __str__(self):
         return f"{self.wallet_id} - {self.user.username}"
+        
+    def save(self, *args, **kwargs):
+        if not self.wallet_id:
+            self.wallet_id = f"W{uuid.uuid4().hex[:8].upper()}"
+        super().save(*args, **kwargs)
 
     def is_transaction_allowed(self, amount):
         if self.status != 'active':

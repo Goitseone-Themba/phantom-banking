@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Guide - Phantom Banking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Phantom Banking Login Guide</h1>
+    
+    <h2>For Merchants</h2>
+    <p>When logging in as a merchant:</p>
+    <ul>
+        <li>Use your <strong>admin_email</strong> as the username_or_email field</li>
+        <li>Use your password that you created during registration</li>
+    </ul>
+    
+    <pre>
+{
+  "username_or_email": "your_admin_email@example.com",
+  "password": "your_password"
+}
+    </pre>
+    
+    <h2>For Customers</h2>
+    <p>When logging in as a customer:</p>
+    <ul>
+        <li>Use either your <strong>username</strong> or <strong>email</strong> as the username_or_email field</li>
+        <li>Use your password</li>
+    </ul>
+    
+    <pre>
+{
+  "username_or_email": "your_username_or_email@example.com",
+  "password": "your_password"
+}
+    </pre>
+    
+    <h2>For System Administrators</h2>
+    <p>When logging in as a system administrator:</p>
+    <ul>
+        <li>Use either your <strong>username</strong> or <strong>email</strong> as the username_or_email field</li>
+        <li>Use your password</li>
+    </ul>
+    
+    <pre>
+{
+  "username_or_email": "admin_username_or_email@example.com",
+  "password": "your_password"
+}
+    </pre>
+    
+    <h2>API Endpoint</h2>
+    <p>Send a POST request to: <code>/api/auth/login/</code></p>
+    
+    <h2>Response</h2>
+    <p>Upon successful login, you will receive:</p>
+    <ul>
+        <li>An access token for API authentication</li>
+        <li>A refresh token to get new access tokens</li>
+        <li>User information including role (admin, merchant, or customer)</li>
+    </ul>
+    
+    <pre>
+{
+  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+  "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+  "user": {
+    "id": 1,
+    "username": "username",
+    "email": "email@example.com",
+    "first_name": "First",
+    "last_name": "Last",
+    "phone_number": "+1234567890",
+    "role": "admin",
+    "email_verified": true,
+    "verification_status": "verified"
+  }
+}
+    </pre>
+</body>
+</html>

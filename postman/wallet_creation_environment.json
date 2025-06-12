@@ -1,0 +1,67 @@
+{
+  "id": "wallet-creation-environment",
+  "name": "Phantom Banking - Wallet Creation",
+  "values": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "merchant_username",
+      "value": "merchant1",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "merchant_password",
+      "value": "merchant123",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "request_id",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "wallet_id",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "customer_username",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "customer_email",
+      "value": "john.doe@example.com",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "customer_password",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}

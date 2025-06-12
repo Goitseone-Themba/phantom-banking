@@ -7,6 +7,8 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
 from .models import CustomUser, EmailVerification, PasswordReset
+from django.db import models
+from django.core.cache import cache
 
 def generate_token():
     return secrets.token_urlsafe(32)
@@ -134,28 +136,25 @@ def reset_password(token, new_password):
 def create_merchant_user(business_name, registration_number, contact_email, 
                         contact_phone, admin_name, admin_email, password):
     """Create a new merchant user with associated merchant profile"""
-    from .models import MerchantProfile
+    from .models import MerchantUser
     
     # Create the user first
     user = CustomUser.objects.create_user(
         username=f"merchant_{registration_number}",
         email=admin_email,
         password=password,
-        first_name=admin_name.split()[0],
-        last_name=' '.join(admin_name.split()[1:]) if len(admin_name.split()) > 1 else '',
-        role='merchant',
-        phone_number=contact_phone
+        role='merchant'
     )
     
     # Create the merchant profile
-    merchant_profile = MerchantProfile.objects.create(
+    merchant_profile = MerchantUser.objects.create(
         user=user,
         business_name=business_name,
         registration_number=registration_number,
         contact_email=contact_email,
         contact_phone=contact_phone,
-        admin_name=admin_name,
-        admin_email=admin_email
+        business_type='standard',
+        address=''
     )
     
     # Send verification email
@@ -187,7 +186,13 @@ def send_otp_email(user, otp):
     )
 
 def validate_login(username_or_email, password):
-    """Validate user login credentials and handle 2FA"""
+    """
+    Validate user login credentials and handle 2FA
+    
+    For merchants: Use admin_email as username_or_email
+    For customers: Use username or email as username_or_email
+    For system admins: Use username or email as username_or_email
+    """
     try:
         # Try to get user by username or email
         user = CustomUser.objects.get(
@@ -197,12 +202,12 @@ def validate_login(username_or_email, password):
         
         # Check if account is locked
         if user.is_account_locked():
-            return False, "Account is temporarily locked. Please try again later.", None
+            return False, "Account is temporarily locked. Please try again later."
         
         # Check password
         if not user.check_password(password):
             user.increment_failed_login()
-            return False, "Invalid credentials.", None
+            return False, "Invalid credentials."
         
         # Reset failed login attempts on successful login
         user.reset_failed_login()
@@ -216,10 +221,11 @@ def validate_login(username_or_email, password):
         # Send OTP via email
         send_otp_email(user, otp)
         
-        return True, "OTP sent to your email. Please verify to complete login.", user
+        # Return user object with a message indicating OTP was sent
+        return True, {"user": user, "message": "OTP sent to your email. Please verify to complete login."}
         
     except CustomUser.DoesNotExist:
-        return False, "Invalid credentials.", None
+        return False, "Invalid credentials."
 
 def verify_login_otp(user_id, otp):
     """Verify the OTP provided during login"""

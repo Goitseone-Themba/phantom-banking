@@ -4,7 +4,7 @@ from .views import WalletViewSet, WalletCreationRequestViewSet
 
 router = DefaultRouter()
 router.register(r'wallets', WalletViewSet)
-router.register(r'wallet-requests', WalletCreationRequestViewSet)
+router.register(r'wallet-creation', WalletCreationRequestViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -29,7 +29,7 @@ class SecurityHeadersMiddleware:
     def _check_security_headers(self, request):
         # Verify origin for CORS requests
         if request.META.get('HTTP_ORIGIN'):
-            if request.META['HTTP_ORIGIN'] not in settings.ALLOWED_ORIGINS:
+            if request.META['HTTP_ORIGIN'] not in settings.CORS_ALLOWED_ORIGINS:
                 return False
 
         # Verify content type for POST requests

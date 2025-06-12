@@ -34,11 +34,7 @@ INSTALLED_APPS = [
     
     # Local apps
     'security.apps.SecurityConfig',
-    'phantom_apps.kyc',
     'phantom_apps.merchants',
-    'phantom_apps.payments',
-    'phantom_apps.transactions',
-    'phantom_apps.customers',
     'wallets',
 ]
 
@@ -158,6 +154,9 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+# Frontend URL for email verification links
+FRONTEND_URL = "http://localhost:3000"
+
 # Security settings
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
@@ -168,6 +167,17 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000  # 1 year
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development - prints to console
+# For production, use:
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'lebanggarebantsi@gmail.com'
+EMAIL_HOST_PASSWORD = 'hazt qszr zakt owmr'
+DEFAULT_FROM_EMAIL = 'noreply@phantom-banking.com'
 
 # Logging configuration
 LOGGING = {

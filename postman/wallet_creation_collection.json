@@ -1,0 +1,326 @@
+{
+  "info": {
+    "_postman_id": "wallet-creation-collection",
+    "name": "Phantom Banking - Wallet Creation",
+    "description": "Collection for creating and managing customer wallets",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Merchant Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/login/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username_or_email\": \"{{merchant_username}}\",\n    \"password\": \"{{merchant_password}}\"\n}"
+            },
+            "description": "Login as a merchant to get access token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Wallet Creation",
+      "item": [
+        {
+          "name": "Create Wallet Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wallet-management/wallet-creation/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet-management", "wallet-creation"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone_number\": \"+1234567890\",\n    \"national_id\": \"ID123456\",\n    \"date_of_birth\": \"1990-01-01\",\n    \"username\": \"john_doe123\"\n}"
+            },
+            "description": "Create a wallet request for a customer with explicit username"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Wallet Request (Auto Username)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wallet-management/wallet-creation/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet-management", "wallet-creation"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Smith\",\n    \"email\": \"jane.smith@example.com\",\n    \"phone_number\": \"+1987654321\",\n    \"national_id\": \"ID654321\",\n    \"date_of_birth\": \"1992-05-15\"\n}"
+            },
+            "description": "Create a wallet request for a customer with auto-generated username"
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Wallet Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wallet-management/wallet-creation/{{request_id}}/approve/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet-management", "wallet-creation", "{{request_id}}", "approve"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"custom_username123\"\n}"
+            },
+            "description": "Approve a wallet creation request with custom username"
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Wallet Request (Default Username)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wallet-management/wallet-creation/{{request_id}}/approve/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet-management", "wallet-creation", "{{request_id}}", "approve"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "description": "Approve a wallet creation request using default username"
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Wallet Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wallet-management/wallet-creation/{{request_id}}/reject/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet-management", "wallet-creation", "{{request_id}}", "reject"]
+            },
+            "description": "Reject a wallet creation request"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Wallet Management",
+      "item": [
+        {
+          "name": "List Wallets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wallet-management/wallets/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet-management", "wallets"]
+            },
+            "description": "List all wallets for the merchant"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Wallet Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wallet-management/wallets/{{wallet_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wallet-management", "wallets", "{{wallet_id}}"]
+            },
+            "description": "Get details for a specific wallet"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customer Login",
+      "item": [
+        {
+          "name": "Customer Login with Username",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/login/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username_or_email\": \"{{customer_username}}\",\n    \"password\": \"{{customer_password}}\"\n}"
+            },
+            "description": "Login as a customer using username"
+          },
+          "response": []
+        },
+        {
+          "name": "Customer Login with Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/login/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username_or_email\": \"{{customer_email}}\",\n    \"password\": \"{{customer_password}}\"\n}"
+            },
+            "description": "Login as a customer using email"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-extract tokens from login response",
+          "if (pm.response.code === 200 && (pm.info.requestName === \"Merchant Login\" || pm.info.requestName.includes(\"Customer Login\"))) {",
+          "    var jsonData = pm.response.json();",
+          "    if (jsonData.access) {",
+          "        pm.environment.set(\"access_token\", jsonData.access);",
+          "    }",
+          "    if (jsonData.refresh) {",
+          "        pm.environment.set(\"refresh_token\", jsonData.refresh);",
+          "    }",
+          "}",
+          "",
+          "// Auto-extract request_id from wallet creation response",
+          "if (pm.response.code === 201 && pm.info.requestName.includes(\"Create Wallet Request\")) {",
+          "    var jsonData = pm.response.json();",
+          "    if (jsonData.request_id) {",
+          "        pm.environment.set(\"request_id\", jsonData.request_id);",
+          "    }",
+          "}",
+          "",
+          "// Auto-extract wallet_id and username from wallet approval response",
+          "if (pm.response.code === 200 && pm.info.requestName.includes(\"Approve Wallet Request\")) {",
+          "    var jsonData = pm.response.json();",
+          "    if (jsonData.wallet_id) {",
+          "        pm.environment.set(\"wallet_id\", jsonData.wallet_id);",
+          "    }",
+          "    if (jsonData.username) {",
+          "        pm.environment.set(\"customer_username\", jsonData.username);",
+          "    }",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "merchant_username",
+      "value": "merchant1"
+    },
+    {
+      "key": "merchant_password",
+      "value": "merchant123"
+    }
+  ]
+}

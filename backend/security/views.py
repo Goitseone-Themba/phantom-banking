@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from .models import MerchantProfile
+from .models import MerchantUser
 from .serializers import (
     UserSerializer, MerchantProfileSerializer, MerchantSignupSerializer,
     LoginSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer,
@@ -34,8 +34,15 @@ class AuthViewSet(viewsets.ViewSet):
                 return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
     def login(self, request):
+        """
+        Login endpoint for merchants, customers, and system administrators.
+        
+        For merchants: Use admin_email as username_or_email
+        For customers: Use username or email as username_or_email
+        For system admins: Use username or email as username_or_email
+        """
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             success, result = validate_login(
@@ -44,14 +51,39 @@ class AuthViewSet(viewsets.ViewSet):
             )
             
             if success:
-                refresh = RefreshToken.for_user(result)
+                user = result["user"]
                 return Response({
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token),
-                    'user': UserSerializer(result).data
+                    'message': result["message"],
+                    'user_id': user.id,
+                    'email': user.email,
+                    'require_otp': True
                 })
             return Response({'error': result}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
+    def verify_otp(self, request):
+        """
+        Verify OTP sent during login
+        """
+        user_id = request.data.get('user_id')
+        otp = request.data.get('otp')
+        
+        if not user_id or not otp:
+            return Response({'error': 'User ID and OTP are required'}, 
+                          status=status.HTTP_400_BAD_REQUEST)
+        
+        success, message = verify_login_otp(user_id, otp)
+        if success:
+            user = User.objects.get(id=user_id)
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'user': UserSerializer(user).data
+            })
+        
+        return Response({'error': message}, status=status.HTTP_401_UNAUTHORIZED)
 
     @action(detail=False, methods=['post'])
     def verify_email(self, request):
@@ -107,14 +139,16 @@ class AuthViewSet(viewsets.ViewSet):
                           status=status.HTTP_400_BAD_REQUEST)
 
 class MerchantViewSet(viewsets.ModelViewSet):
-    queryset = MerchantProfile.objects.all()
+    queryset = MerchantUser.objects.all()
     serializer_class = MerchantProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return MerchantUser.objects.none()
         if self.request.user.is_superuser:
-            return MerchantProfile.objects.all()
-        return MerchantProfile.objects.filter(user=self.request.user)
+            return MerchantUser.objects.all()
+        return MerchantUser.objects.filter(user=self.request.user)
 
     @action(detail=False, methods=['post'])
     def create_wallet(self, request):

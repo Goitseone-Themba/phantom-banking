@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wallet Request Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .container {
+            padding: 20px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+        }
+        .header {
+            background-color: #0066cc;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #666666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Wallet Request Update</h2>
+        </div>
+        <div class="content">
+            <p>Dear {{ first_name }} {{ last_name }},</p>
+            
+            {% if status == 'approved' %}
+                <p>We are pleased to inform you that your wallet request has been approved!</p>
+                <div class="status status-approved">APPROVED</div>
+                <p>Your wallet has been created successfully. You will receive a separate email with your login credentials.</p>
+            {% elif status == 'rejected' %}
+                <p>We regret to inform you that your wallet request has been declined.</p>
+                <div class="status status-rejected">DECLINED</div>
+                <p>If you believe this is an error or would like more information, please contact our customer support team.</p>
+            {% else %}
+                <p>Your wallet request has been received and is currently being processed.</p>
+                <div class="status status-pending">PENDING</div>
+                <p>We will notify you once your request has been reviewed.</p>
+            {% endif %}
+            
+            <p>Request details:</p>
+            <ul>
+                <li><strong>Merchant:</strong> {{ merchant_name }}</li>
+                <li><strong>Date Submitted:</strong> {{ created_at|date:"F j, Y" }}</li>
+            </ul>
+            
+            <p>Thank you for choosing Phantom Banking.</p>
+            
+            <p>Best regards,<br>
+            The Phantom Banking Team</p>
+        </div>
+        <div class="footer">
+            <p>This is an automated message. Please do not reply to this email.</p>
+            <p>&copy; 2025 Phantom Banking. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from .models import MerchantProfile, EmailVerification, PasswordReset
+from .models import MerchantUser, EmailVerification, PasswordReset
 
 User = get_user_model()
 
@@ -14,11 +14,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class MerchantProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MerchantProfile
+        model = MerchantUser
         fields = ('id', 'business_name', 'registration_number', 'contact_email',
-                 'contact_phone', 'admin_name', 'admin_email', 'is_approved',
-                 'approval_date', 'created_at', 'updated_at')
-        read_only_fields = ('is_approved', 'approval_date', 'created_at', 'updated_at')
+                 'contact_phone', 'is_approved', 'approval_date')
+        read_only_fields = ('is_approved', 'approval_date')
 
 class MerchantSignupSerializer(serializers.Serializer):
     business_name = serializers.CharField(max_length=255)
@@ -35,7 +34,7 @@ class MerchantSignupSerializer(serializers.Serializer):
             raise ValidationError("Passwords do not match")
         
         # Check if registration number is unique
-        if MerchantProfile.objects.filter(registration_number=data['registration_number']).exists():
+        if MerchantUser.objects.filter(registration_number=data['registration_number']).exists():
             raise ValidationError("A merchant with this registration number already exists")
         
         # Check if admin email is unique
@@ -45,8 +44,12 @@ class MerchantSignupSerializer(serializers.Serializer):
         return data
 
 class LoginSerializer(serializers.Serializer):
-    username_or_email = serializers.CharField()
-    password = serializers.CharField(write_only=True)
+    username_or_email = serializers.CharField(help_text="Username or email address")
+    password = serializers.CharField(write_only=True, help_text="User password")
+    
+class OTPVerificationSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField(help_text="User ID received from login response")
+    otp = serializers.CharField(help_text="One-time password received via email")
 
 class PasswordResetRequestSerializer(serializers.Serializer):
     email = serializers.EmailField()

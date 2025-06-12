@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="wallet-creation-process" name="Wallet Creation Process" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Wallet Creation Request">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_ValidateRequest" />
+    
+    <bpmn:serviceTask id="Task_ValidateRequest" name="Validate Wallet Request" camunda:type="external" camunda:topic="validate-wallet-request">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_ValidateRequest" targetRef="Gateway_1" />
+    
+    <bpmn:exclusiveGateway id="Gateway_1" name="Validation Result">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    
+    <bpmn:sequenceFlow id="Flow_3" name="Valid" sourceRef="Gateway_1" targetRef="Task_CreateWallet">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${validation_success == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    
+    <bpmn:sequenceFlow id="Flow_4" name="Invalid" sourceRef="Gateway_1" targetRef="EndEvent_Failed">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${validation_success == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    
+    <bpmn:serviceTask id="Task_CreateWallet" name="Create Wallet" camunda:type="external" camunda:topic="create-wallet">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_CreateWallet" targetRef="Task_NotifyCreation" />
+    
+    <bpmn:serviceTask id="Task_NotifyCreation" name="Send Notifications" camunda:type="external" camunda:topic="notify-wallet-creation">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_NotifyCreation" targetRef="EndEvent_Success" />
+    
+    <bpmn:endEvent id="EndEvent_Success" name="Wallet Created">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+    </bpmn:endEvent>
+    
+    <bpmn:endEvent id="EndEvent_Failed" name="Creation Failed">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+</bpmn:definitions>

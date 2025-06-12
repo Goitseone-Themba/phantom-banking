@@ -5,13 +5,29 @@ Email and security settings that should be imported into the main Django setting
 import os
 from datetime import timedelta
 
+# Camunda BPM Settings
+CAMUNDA_SETTINGS = {
+    'REST_URL': os.getenv('CAMUNDA_REST_URL', 'http://localhost:8080/engine-rest'),
+    'CLIENT_ID': os.getenv('CAMUNDA_CLIENT_ID', 'phantom-worker'),
+    'CLIENT_MAX_TASKS': int(os.getenv('CAMUNDA_CLIENT_MAX_TASKS', '1')),
+    'CLIENT_LOCK_DURATION': int(os.getenv('CAMUNDA_CLIENT_LOCK_DURATION', '10000')),  # 10 seconds
+    'CLIENT_ASYNC_RESPONSE_TIMEOUT': int(os.getenv('CAMUNDA_CLIENT_ASYNC_RESPONSE_TIMEOUT', '5000')),  # 5 seconds
+    'PROCESSES': {
+        'WALLET_CREATION': 'wallet-creation-process',
+        'KYC_VALIDATION': 'kyc-validation-process',
+        'MERCHANT_APPROVAL': 'merchant-approval-process',
+        'SUSPICIOUS_ACTIVITY': 'suspicious-activity-process',
+        'EMAIL_VERIFICATION': 'email-verification-process'
+    }
+}
+
 # Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'your-email@gmail.com')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'your-app-specific-password')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'mpheelebang@gmail.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'Garebantsi#4')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # JWT Settings
@@ -70,4 +86,4 @@ SECURITY_SETTINGS = {
 }
 
 # Frontend URL for email links
-FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:8000')

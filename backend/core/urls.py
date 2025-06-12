@@ -28,6 +28,9 @@ urlpatterns = [
     # Wallet management endpoints
     path('api/wallet-management/', include('wallets.urls')),
     
+    # Merchant management endpoints
+    path('api/merchant-management/', include('phantom_apps.merchants.urls')),
+    
     # API Documentation
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

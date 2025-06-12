@@ -21,12 +21,12 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    # Authentication and security endpoints
     path('api/auth/', include('security.urls')),
-    path('api/kyc/', include('phantom_apps.kyc.urls')),
-    path('api/wallets/', include('phantom_apps.wallets.urls')),
-    path('api/payments/', include('phantom_apps.payments.urls')),
-    path('api/transactions/', include('phantom_apps.transactions.urls')),
-    path('api/merchants/', include('phantom_apps.merchants.urls')),
+    
+    # Wallet management endpoints
+    path('api/wallet-management/', include('wallets.urls')),
     
     # Swagger/OpenAPI documentation
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
