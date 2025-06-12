@@ -1,10 +1,16 @@
 import { SearchBar } from "@/components/search-bar";
 import { TransactionsTable, type transactionsTableFormat } from "@/components/transactions-table";
-import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent } from "@/components/ui/popover";
+import { PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+
 const transactions: transactionsTableFormat[] = [
     {
         transactionId: "TXN001",
-        date: "June 12, 2025 10:30 AM",
+        date: "2025-06-12",
         amount: 150.75,
         walletId: "W4A7B",
         type: "credit",
@@ -12,7 +18,7 @@ const transactions: transactionsTableFormat[] = [
     },
     {
         transactionId: "TXN002",
-        date: "June 12, 2025 8:15 AM",
+        date: "2025-06-12",
         amount: 89.99,
         walletId: "W2C9D",
         type: "debit",
@@ -20,7 +26,7 @@ const transactions: transactionsTableFormat[] = [
     },
     {
         transactionId: "TXN003",
-        date: "June 11, 2025 4:45 PM",
+        date: "2025-06-11",
         amount: 250.0,
         walletId: "W4A7B",
         type: "credit",
@@ -28,7 +34,7 @@ const transactions: transactionsTableFormat[] = [
     },
     {
         transactionId: "TXN004",
-        date: "June 11, 2025 2:20 PM",
+        date: "2025-06-11",
         amount: 45.5,
         walletId: "W8E1F",
         type: "debit",
@@ -36,7 +42,7 @@ const transactions: transactionsTableFormat[] = [
     },
     {
         transactionId: "TXN005",
-        date: "June 11, 2025 11:30 AM",
+        date: "2025-06-11",
         amount: 500.0,
         walletId: "W5G3H",
         type: "credit",
@@ -44,7 +50,7 @@ const transactions: transactionsTableFormat[] = [
     },
     {
         transactionId: "TXN006",
-        date: "June 10, 2025 7:45 PM",
+        date: "2025-06-10",
         amount: 32.25,
         walletId: "W2C9D",
         type: "debit",
@@ -52,7 +58,7 @@ const transactions: transactionsTableFormat[] = [
     },
     {
         transactionId: "TXN007",
-        date: "June 10, 2025 1:15 PM",
+        date: "2025-06-10",
         amount: 175.8,
         walletId: "W9J4K",
         type: "credit",
@@ -60,7 +66,7 @@ const transactions: transactionsTableFormat[] = [
     },
     {
         transactionId: "TXN008",
-        date: "June 10, 2025 9:30 AM",
+        date: "2025-06-10",
         amount: 67.4,
         walletId: "W8E1F",
         type: "debit",
@@ -68,7 +74,7 @@ const transactions: transactionsTableFormat[] = [
     },
     {
         transactionId: "TXN009",
-        date: "June 9, 2025 5:20 PM",
+        date: "2025-06-09",
         amount: 300.0,
         walletId: "W4A7B",
         type: "credit",
@@ -76,7 +82,7 @@ const transactions: transactionsTableFormat[] = [
     },
     {
         transactionId: "TXN010",
-        date: "June 9, 2025 12:45 PM",
+        date: "2025-06-09",
         amount: 124.75,
         walletId: "W6L2M",
         type: "debit",
@@ -84,7 +90,7 @@ const transactions: transactionsTableFormat[] = [
     },
     {
         transactionId: "TXN011",
-        date: "June 8, 2025 8:10 PM",
+        date: "2025-06-08",
         amount: 85.0,
         walletId: "W5G3H",
         type: "credit",
@@ -92,7 +98,7 @@ const transactions: transactionsTableFormat[] = [
     },
     {
         transactionId: "TXN012",
-        date: "June 8, 2025 3:35 PM",
+        date: "2025-06-08",
         amount: 199.99,
         walletId: "W7N8P",
         type: "debit",
@@ -102,33 +108,69 @@ const transactions: transactionsTableFormat[] = [
 
 export function Transactions() {
     const [searchTerm, setSearchTerm] = useState("");
+    const [searchDate, setSearchDate] = useState<Date | undefined>(undefined);
+    const [open, setOpen] = useState(false);
+
     const filteredTransactions = useMemo(() => {
-        if (searchTerm === "") {
-            return transactions;
-        }
-        return transactions.filter((transaction) => {
+        let filtered = transactions;
+
+        if (searchTerm !== "") {
             const searchValue = searchTerm.toLowerCase();
-            return (
-                transaction.transactionId.toLowerCase().includes(searchValue) ||
-                transaction.walletId.toLowerCase().includes(searchValue)
+            filtered = filtered.filter(
+                (transaction) =>
+                    transaction.transactionId.toLowerCase().includes(searchValue) ||
+                    transaction.walletId.toLowerCase().includes(searchValue) ||
+                    transaction.amount.toString().includes(searchValue)
             );
-        });
-    }, [searchTerm]);
+        }
+
+        if (searchDate) {
+            const selectedDateStr = searchDate.toISOString().split("T")[0];
+            filtered = filtered.filter((transaction) => transaction.date === selectedDateStr);
+        }
+
+        return filtered;
+    }, [searchTerm, searchDate]);
 
     return (
         <div className="w-[inherit] h-auto flex flex-nowrap justify-start p-8 gap-6 flex-col ">
             <h1 className="roboto-heading text-6xl font-bold">Transactions</h1>
             <p className="roboto-text text-accent-foreground">
-                Review and manage all transactions proccesed through your phantom banking platform.
+                Review and manage all transactions processed through your phantom banking platform.
             </p>
             <SearchBar
                 value={searchTerm}
                 onChange={(e) => {
                     setSearchTerm(e.target.value);
                 }}
-                placeholder="Search by transaction ID, wallet ID, amount or date."
-            ></SearchBar>
-            <TransactionsTable tabledata={filteredTransactions}></TransactionsTable>
+                placeholder="Search by transaction ID, wallet ID, or amount."
+            />
+            <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                    <Button
+                        variant="outline"
+                        data-empty={!searchDate}
+                        className="data-[empty=true]:text-muted-foreground w-min justify-start text-left font-normal"
+                    >
+                        <CalendarIcon />
+                        {searchDate ? searchDate.toLocaleDateString() : "Filter transaction by Date"}
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                    <Calendar
+                        mode="single"
+                        selected={searchDate}
+                        defaultMonth={searchDate}
+                        onSelect={(date) => {
+                            setSearchDate(date);
+                            setOpen(false);
+                        }}
+                        className="rounded-lg border shadow-sm"
+                    />
+                </PopoverContent>
+            </Popover>
+
+            <TransactionsTable tabledata={filteredTransactions} />
         </div>
     );
 }
