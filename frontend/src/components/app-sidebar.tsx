@@ -1,14 +1,4 @@
-import {
-    ChartBar,
-    Receipt,
-    BadgeHelp,
-    Home,
-    Hourglass,
-    Settings,
-    Wallet,
-    ChevronUp,
-    User2,
-} from "lucide-react";
+import { ChartBar, Receipt, Home, Hourglass, Settings, Wallet, ChevronUp, User2 } from "lucide-react";
 import { PhantomBankingLogo } from "./ui/sidebar-label";
 import { Link } from "react-router-dom";
 import {
@@ -20,7 +10,6 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-    SidebarProvider,
     SidebarTrigger,
     useSidebar,
 } from "@/components/ui/sidebar";
@@ -69,8 +58,8 @@ const items = [
 export function AppSidebar() {
     const [activeUrl, setActiveUrl] = React.useState(window.location.hash);
     const { toggleSidebar } = useSidebar();
-    const [userName, setUserName] = useState();
-
+    const [userName, setUserName] = useState("OARABILE INC");
+    //setUserName("Oarabile Koore");
     React.useEffect(() => {
         const handleHashChange = () => {
             setActiveUrl(window.location.hash);
