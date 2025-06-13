@@ -100,36 +100,17 @@ export function Wallets() {
                         <Link to="/createwallet"> Create Wallet</Link>
                     </Button>
                 </div>
-                <Tabs defaultValue="wallets" className="w-[-webkit-fill-available]">
-                    <TabsList>
-                        <TabsTrigger value="wallets">Wallets</TabsTrigger>
-                        <TabsTrigger value="credit">Your Credit Wallet</TabsTrigger>
-                        <TabsTrigger value="debit">Your Debit Wallet</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="wallets">
-                        <div className="width-[-webkit-fill-available] flex flex-nowrap justify-start pt-4 gap-6 flex-col">
-                            <SearchBar
-                                value={searchTerm}
-                                onChange={(event) => {
-                                    setSearchTerm(event.target.value);
-                                }}
-                                placeholder="Search by name, phone and wallet ID"
-                            />
-                            <WalletTable wallets={filteredWallets} />
-                        </div>
-                    </TabsContent>
-                    <TabsContent value="credit">
-                        <div className="width-[-webkit-fill-available] flex flex-nowrap justify-start pt-4 gap-6 flex-col">
-                            <h2 className="text-3xl roboto-text">Your Credit Wallet</h2>
-                            <InfoCard title="Your Credit Balance" value="5400"></InfoCard>
-                        </div>
-                    </TabsContent>
-                    <TabsContent value="debit">
-                        <div className="width-[-webkit-fill-available] flex flex-nowrap justify-start pt-4 gap-6 flex-col">
-                            TODO
-                        </div>
-                    </TabsContent>
-                </Tabs>
+
+                <div className="width-[-webkit-fill-available] flex flex-nowrap justify-start pt-4 gap-6 flex-col">
+                    <SearchBar
+                        value={searchTerm}
+                        onChange={(event) => {
+                            setSearchTerm(event.target.value);
+                        }}
+                        placeholder="Search by name, phone and wallet ID"
+                    />
+                    <WalletTable wallets={filteredWallets} />
+                </div>
             </div>
         </>
     );
