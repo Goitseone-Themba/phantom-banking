@@ -82,7 +82,6 @@ export function Settings() {
 
                 <TabsContent value="apikeys">
                     <div className="width-auto flex flex-nowrap justify-start pt-4 gap-6 flex-col">
-                        <APIUsageDashboard></APIUsageDashboard>
                         <Label>Api Key</Label>
                         <Input
                             disabled={doesUserHavePermissionsToEditSettings}
