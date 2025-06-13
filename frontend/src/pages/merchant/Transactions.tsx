@@ -2,10 +2,12 @@ import { SearchBar } from "@/components/search-bar";
 import { TransactionsTable, type transactionsTableFormat } from "@/components/transactions-table";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { CalendarIcon, CircleDollarSign } from "lucide-react";
+import { useMemo, useState } from "react";
 
 const transactions: transactionsTableFormat[] = [
     {
@@ -110,7 +112,9 @@ export function Transactions() {
     const [searchTerm, setSearchTerm] = useState("");
     const [searchDate, setSearchDate] = useState<Date | undefined>(undefined);
     const [open, setOpen] = useState(false);
-
+    const [searchAmountMinimum, setSearchAmountMinimum] = useState<number | undefined>(undefined);
+    const [searchAmountMaximum, setSearchAmountMaximum] = useState<number | undefined>(undefined);
+    const [shouldAmountFilterOpen, setAmountFilterToOpen] = useState(false);
     const filteredTransactions = useMemo(() => {
         let filtered = transactions;
 
@@ -129,8 +133,19 @@ export function Transactions() {
             filtered = filtered.filter((transaction) => transaction.date === selectedDateStr);
         }
 
+        if (searchAmountMinimum !== undefined || searchAmountMaximum !== undefined) {
+            // If both values are zero, don't apply any amount filtering (show whole table)
+            if (!(searchAmountMinimum === 0 && searchAmountMaximum === 0)) {
+                filtered = filtered.filter((transaction) => {
+                    const amount = transaction.amount;
+                    const min = searchAmountMinimum ?? 0;
+                    const max = searchAmountMaximum ?? Infinity;
+                    return amount >= min && amount <= max;
+                });
+            }
+        }
         return filtered;
-    }, [searchTerm, searchDate]);
+    }, [searchTerm, searchDate, searchAmountMaximum, searchAmountMinimum]);
 
     return (
         <div className="w-[inherit] h-auto flex flex-nowrap justify-start p-8 gap-6 flex-col ">
@@ -145,31 +160,86 @@ export function Transactions() {
                 }}
                 placeholder="Search by transaction ID, wallet ID, or amount."
             />
-            <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                    <Button
-                        variant="outline"
-                        data-empty={!searchDate}
-                        className="data-[empty=true]:text-muted-foreground w-min justify-start text-left font-normal"
-                    >
-                        <CalendarIcon />
-                        {searchDate ? searchDate.toLocaleDateString() : "Filter transaction by Date"}
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                    <Calendar
-                        mode="single"
-                        selected={searchDate}
-                        defaultMonth={searchDate}
-                        onSelect={(date) => {
-                            setSearchDate(date);
-                            setOpen(false);
-                        }}
-                        className="rounded-lg border shadow-sm"
-                    />
-                </PopoverContent>
-            </Popover>
+            <div className="flex flex-row flex-nowrap gap-4 min-w-auto">
+                <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant="outline"
+                            data-empty={!searchDate}
+                            className="data-[empty=true]:text-muted-foreground w-min justify-start text-left font-normal"
+                        >
+                            <CalendarIcon />
+                            {searchDate ? searchDate.toLocaleDateString() : "Filter transaction by Date"}
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                        <Calendar
+                            mode="single"
+                            selected={searchDate}
+                            defaultMonth={searchDate}
+                            onSelect={(date) => {
+                                setSearchDate(date);
+                                setOpen(false);
+                            }}
+                            className="rounded-lg border shadow-sm"
+                        />
+                    </PopoverContent>
+                </Popover>
 
+                <Popover open={shouldAmountFilterOpen} onOpenChange={setAmountFilterToOpen}>
+                    <PopoverTrigger asChild>
+                        <Button variant="outline">
+                            {" "}
+                            <CircleDollarSign />
+                            Filter by Amount
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-80">
+                        <div className="grid gap-4">
+                            <div className="space-y-2">
+                                <h4 className="leading-none font-medium">Amount Filter</h4>
+                                <p className="text-muted-foreground text-sm">
+                                    Filter transactions by a range.
+                                </p>
+                            </div>
+                            <div className="grid gap-2">
+                                <div className="grid grid-cols-3 items-center gap-4">
+                                    <Label htmlFor="minimum">Minimum</Label>
+                                    <Input
+                                        onKeyUp={(ev) => {
+                                            if (ev.code === "Enter") {
+                                                setAmountFilterToOpen(false);
+                                            }
+                                        }}
+                                        onChange={(e) => {
+                                            setSearchAmountMinimum(Number(e.target.value));
+                                        }}
+                                        value={searchAmountMinimum || 1}
+                                        id="minimum"
+                                        className="col-span-2 h-8"
+                                    />
+                                </div>
+                                <div className="grid grid-cols-3 items-center gap-4">
+                                    <Label htmlFor="maximum">Maximum</Label>
+                                    <Input
+                                        onKeyUp={(ev) => {
+                                            if (ev.code === "Enter") {
+                                                setAmountFilterToOpen(false);
+                                            }
+                                        }}
+                                        onChange={(e) => {
+                                            setSearchAmountMaximum(Number(e.target.value));
+                                        }}
+                                        id="maximum"
+                                        value={searchAmountMaximum || Infinity}
+                                        className="col-span-2 h-8"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </PopoverContent>
+                </Popover>
+            </div>
             <TransactionsTable tabledata={filteredTransactions} />
         </div>
     );
