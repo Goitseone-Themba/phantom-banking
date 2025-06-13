@@ -67,7 +67,6 @@ const apiKeys = [
 
 export default function APIUsageDashboard() {
     const [data] = useState(generateSampleData());
-    const [selectedPeriod, setSelectedPeriod] = useState("30d");
 
     const totalRequests = data.reduce((sum, day) => sum + day.requests, 0);
     const avgLatency = Math.round(data.reduce((sum, day) => sum + day.latency, 0) / data.length);
