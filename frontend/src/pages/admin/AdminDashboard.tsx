@@ -1,8 +1,7 @@
 export function AdminDashboard() {
-
     return (
-        <>
-            <h1>Admin Dashboard</h1>
-        </>
-    )
+        <div className="flex flex-nowrap flex-col gap-6 p-6">
+            <h1 className="roboto-heading text-6xl font-bold">Admin Dashboard</h1>
+        </div>
+    );
 }

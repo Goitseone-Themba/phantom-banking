@@ -1,30 +1,14 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 export function InfoCard({ title, value }: { title: string; value: string }) {
     return (
-        <>
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    flexWrap: "nowrap",
-                    justifyContent: "space-between",
-                    backgroundColor: "var(--card)",
-                    zIndex: 2001,
-                    color: "var(--color-foreground)",
-                    border: "none",
-                    maxWidth: "1250px",
-                    width: "calc(100% - 70%)",
-                    padding: "30px",
-                    borderRadius: "4px",
-                }}
-            >
-                <span className="roboto-text text-2xl">{title}</span>
-                <span
-                    style={{ fontStyle: "bold" }}
-                    className="roboto-heading text-2xl text-black font-extrabold"
-                >
-                    {value}
-                </span>
-            </div>
-        </>
+        <Card className="flex-1">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">{value}</div>
+            </CardContent>
+        </Card>
     );
 }

@@ -6,19 +6,21 @@ import { useState } from "react";
 import { Label } from "recharts";
 
 export function PayViaQrCode() {
-    const [qrCodeValue, setqrCodeValue] = useState("https://github.com/Goitseone-Themba/phantom-banking/");
+    const [qrCodeValue, setqrCodeValue] = useState("https://github.com/Goitseone-Themba/phantom-banking");
     const [hasQrChanged, setQrHasChanged] = useState(false);
-    const [qrPaymentAmount, setQRPaymentAmount] = useState("");
+    const [qrPaymentAmount, setQRPaymentAmount] = useState(0);
+    const temporaryEasterEgg = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
 
     const createQRCodePaymentMethod = function (e: any) {
         e ? e.preventDefault() : null;
-        // USE THE qrPaymentAmount Value To Generate A QRCODE
-        // qrPaymentAmount -> Use This in IRL VERSION
-        if (qrPaymentAmount === "") {
+        if (qrPaymentAmount === 0 || qrPaymentAmount === null) {
+            setQrHasChanged(false);
+            setqrCodeValue("https://github.com/Goitseone-Themba/phantom-banking");
             return;
+        } else {
+            setQrHasChanged(true);
+            setqrCodeValue(temporaryEasterEgg);
         }
-        setQrHasChanged(true);
-        setqrCodeValue("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
     };
 
     return (
@@ -37,16 +39,9 @@ export function PayViaQrCode() {
                                     type="number"
                                     placeholder="Enter amount to be paid"
                                     onChange={(event) => {
-                                        if (event.target.value !== "") {
-                                            setQRPaymentAmount(event.target.value);
-                                        } else {
+                                        if (event.target.value === "") {
                                             setQrHasChanged(false);
-                                        }
-                                    }}
-                                    onKeyUp={(event) => {
-                                        if (event.code === "Enter") {
-                                            createQRCodePaymentMethod(null);
-                                        }
+                                        } else setQRPaymentAmount(Number(event.target.value));
                                     }}
                                 />
                                 <Button className="w-auto" onClick={createQRCodePaymentMethod}>
@@ -56,7 +51,6 @@ export function PayViaQrCode() {
                             <div className="ml-4">
                                 <QRCodeSVG
                                     className={!hasQrChanged ? "opacity-30" : "opacity-100"}
-                                    aria-disabled={!hasQrChanged}
                                     value={qrCodeValue}
                                 />
                             </div>
