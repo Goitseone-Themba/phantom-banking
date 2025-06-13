@@ -165,7 +165,6 @@ export function Transactions() {
                     <PopoverTrigger asChild>
                         <Button
                             variant="outline"
-                            data-empty={!searchDate}
                             className="data-[empty=true]:text-muted-foreground w-min justify-start text-left font-normal"
                         >
                             <CalendarIcon />
@@ -214,7 +213,7 @@ export function Transactions() {
                                         onChange={(e) => {
                                             setSearchAmountMinimum(Number(e.target.value));
                                         }}
-                                        value={searchAmountMinimum || 1}
+                                        value={searchAmountMinimum || ""}
                                         id="minimum"
                                         className="col-span-2 h-8"
                                     />
@@ -231,7 +230,7 @@ export function Transactions() {
                                             setSearchAmountMaximum(Number(e.target.value));
                                         }}
                                         id="maximum"
-                                        value={searchAmountMaximum || Infinity}
+                                        value={searchAmountMaximum || ""}
                                         className="col-span-2 h-8"
                                     />
                                 </div>
