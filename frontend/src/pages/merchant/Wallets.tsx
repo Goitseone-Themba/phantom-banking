@@ -27,6 +27,7 @@ import {
 
 import { useMemo, useState } from "react";
 import { InfoCard } from "@/components/info-card";
+import { Link } from "react-router-dom";
 
 const customerWallets = [
     {
@@ -148,52 +149,10 @@ export function Wallets() {
                     <div className="flex-1">
                         <h1 className="roboto-heading text-6xl forced-color-adjust-auto">Wallets</h1>
                     </div>
-                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                        <DialogTrigger asChild>
-                            <Button className="bg-gray-200 text-gray-900" variant="secondary">
-                                Create Wallet
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <form onSubmit={handleWalletCreation}>
-                                <DialogHeader>
-                                    <DialogTitle>Create a new Wallet.</DialogTitle>
-                                    <DialogDescription>
-                                        Enter all the relevant details to create a new wallet.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <div className="grid gap-4">
-                                    <div className="grid gap-3">
-                                        <Label htmlFor="customername">Customer Name</Label>
-                                        <Input id="customername" name="customername" required />
-                                    </div>
-                                    <div className="grid gap-3">
-                                        <Label htmlFor="phonenumber">Phone number</Label>
-                                        <Input id="phonenumber" name="phonenumber" required maxLength={8} />
-                                    </div>
-                                    <div className="grid gap-3">
-                                        <Label htmlFor="initialbalance">Initial Balance (Optional)</Label>
-                                        <Input
-                                            id="initialbalance"
-                                            name="initialbalance"
-                                            type="number"
-                                            maxLength={8}
-                                        />
-                                    </div>
-                                </div>
-                                <DialogFooter>
-                                    <DialogClose asChild>
-                                        <Button type="button" variant="outline">
-                                            Cancel
-                                        </Button>
-                                    </DialogClose>
-                                    <Button variant="default" type="submit">
-                                        Create Wallet
-                                    </Button>
-                                </DialogFooter>
-                            </form>
-                        </DialogContent>
-                    </Dialog>
+
+                    <Button variant="default" type="submit">
+                        <Link to="/createwallet"> Create Wallet</Link>
+                    </Button>
                 </div>
                 <Tabs defaultValue="wallets" className="w-[-webkit-fill-available]">
                     <TabsList>
