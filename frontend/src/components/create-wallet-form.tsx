@@ -4,6 +4,16 @@ import { Label } from "./ui/label";
 import { ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export function CreateWalletForm() {
@@ -13,8 +23,16 @@ export function CreateWalletForm() {
     const [name, setName] = useState<string | undefined>(undefined);
     const [open, setOpen] = useState(false);
     const [date, setDate] = useState<Date | undefined>(undefined);
+    const [hasErrored, setToShowError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
-    const createWallet = () => {};
+    const createWallet = () => {
+        console.log(
+            "Creating Wallet",
+            JSON.stringify({ phone: phoneNumber, name: name, idnumber: id, birthdate: date })
+        );
+    };
+
     return (
         <form
             onSubmit={(event) => {
@@ -98,6 +116,21 @@ export function CreateWalletForm() {
                 >
                     Create Wallet
                 </Button>
+
+                <AlertDialog open={hasErrored} onOpenChange={setToShowError}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>
+                                An error has occurred while trying to create a new wallet.
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>{errorMessage}</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Report This Issue</AlertDialogCancel>
+                            <AlertDialogAction>Close & Try Again</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </form>
     );
