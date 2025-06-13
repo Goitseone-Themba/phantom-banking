@@ -1,0 +1,144 @@
+groups:
+  - name: phantom_banking_alerts
+    rules:
+      # System alerts
+      - alert: HighCPUUsage
+        expr: phantom_banking_cpu_usage_percent > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is above 85% for more than 5 minutes. Current value: {{ $value }}%"
+
+      - alert: HighMemoryUsage
+        expr: (phantom_banking_memory_usage_bytes / (1024*1024*1024)) > 8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is above 8GB for more than 5 minutes. Current value: {{ $value }}GB"
+
+      - alert: HighDiskUsage
+        expr: phantom_banking_disk_usage_percent > 90
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High disk usage detected"
+          description: "Disk usage is above 90% for more than 10 minutes. Current value: {{ $value }}%"
+
+      # Application alerts
+      - alert: HighErrorRate
+        expr: rate(phantom_banking_errors_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is above 0.1 errors/second for more than 2 minutes"
+
+      - alert: SlowResponseTime
+        expr: histogram_quantile(0.95, rate(phantom_banking_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow response time detected"
+          description: "95th percentile response time is above 2 seconds for more than 5 minutes"
+
+      # Business alerts
+      - alert: PendingKYCReviews
+        expr: phantom_banking_kyc_pending > 50
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of pending KYC reviews"
+          description: "There are {{ $value }} pending KYC reviews for more than 30 minutes"
+
+      - alert: FrozenWallets
+        expr: phantom_banking_wallets_frozen > 10
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of frozen wallets"
+          description: "There are {{ $value }} frozen wallets for more than 15 minutes"
+
+      - alert: LowTransactionVolume
+        expr: rate(phantom_banking_transactions_total[1h]) < 1
+        for: 2h
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low transaction volume"
+          description: "Transaction rate is below 1 transaction/hour for more than 2 hours"
+
+      # Database alerts
+      - alert: SlowDatabaseQueries
+        expr: histogram_quantile(0.95, rate(phantom_banking_db_query_duration_seconds_bucket[5m])) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow database queries detected"
+          description: "95th percentile database query time is above 1 second for more than 5 minutes"
+
+      - alert: HighDatabaseConnections
+        expr: phantom_banking_db_connections_active > 50
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of database connections"
+          description: "Database connections are above 50 for more than 10 minutes. Current value: {{ $value }}"
+
+      # Security alerts
+      - alert: HighFailedLogins
+        expr: rate(phantom_banking_failed_logins_total[5m]) > 0.5
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High rate of failed login attempts"
+          description: "Failed login rate is above 0.5 attempts/second for more than 2 minutes"
+
+      - alert: SuspiciousActivity
+        expr: rate(phantom_banking_suspicious_activity_total[5m]) > 0.1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Suspicious activity detected"
+          description: "Suspicious activity rate is above 0.1 events/second for more than 1 minute"
+
+      # Service availability
+      - alert: ServiceDown
+        expr: up{job="phantom-banking"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Phantom Banking service is down"
+          description: "The Phantom Banking application is not responding"
+
+      - alert: DatabaseDown
+        expr: up{job="postgres-exporter"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Database is down"
+          description: "The PostgreSQL database is not responding"
+
+      - alert: RedisDown
+        expr: up{job="redis-exporter"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis is down"
+          description: "The Redis cache service is not responding"
+
