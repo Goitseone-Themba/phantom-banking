@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
     LineChart,
     Line,
@@ -15,71 +14,37 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Activity, TrendingUp, Clock } from "lucide-react";
 
-const generateSampleData = () => {
-    const data = [];
-    const now = new Date();
+interface APIKEYFormat {
+    id: string;
+    name: string;
+    usage: number;
+    limit: number;
+    status: "warning" | "active";
+}
 
-    for (let i = 29; i >= 0; i--) {
-        const date = new Date(now);
-        date.setDate(date.getDate() - i);
+interface HEALTHDATAFormat {
+    errors: number;
+    date: Date;
+    latency: number;
+    erros: number;
+}
 
-        data.push({
-            date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-            requests: Math.floor(Math.random() * 5000) + 1000,
-            errors: Math.floor(Math.random() * 100) + 10,
-            latency: Math.floor(Math.random() * 200) + 50,
-        });
-    }
-
-    return data;
-};
-
-const apiKeys = [
-    {
-        id: "key-1",
-        name: "Production API",
-        usage: 89432,
-        limit: 100000,
-        status: "active",
-    },
-    {
-        id: "key-2",
-        name: "Development API",
-        usage: 23456,
-        limit: 50000,
-        status: "active",
-    },
-    {
-        id: "key-3",
-        name: "Testing API",
-        usage: 5678,
-        limit: 25000,
-        status: "active",
-    },
-    {
-        id: "key-4",
-        name: "Staging API",
-        usage: 34567,
-        limit: 40000,
-        status: "warning",
-    },
-];
-
-export default function APIUsageDashboard() {
-    const [data] = useState(generateSampleData());
-
-    const totalRequests = data.reduce((sum, day) => sum + day.requests, 0);
-    const avgLatency = Math.round(data.reduce((sum, day) => sum + day.latency, 0) / data.length);
-    const errorRate = ((data.reduce((sum, day) => sum + day.errors, 0) / totalRequests) * 100).toFixed(2);
-
-    const getUsageColor = (usage, limit) => {
+export default function APIUsageDashboard({
+    apiData,
+    heatlhData,
+}: {
+    apiData: APIKEYFormat[];
+    heatlhData: HEALTHDATAFormat[];
+}) {
+    const totalRequests =   
+    const getUsageColor = (usage: number, limit: number) => {
         const percentage = (usage / limit) * 100;
         if (percentage >= 90) return "bg-red-500";
         if (percentage >= 70) return "bg-yellow-500";
         return "bg-green-500";
     };
 
-    const getStatusBadge = (status) => {
+    const getStatusBadge = (status: "warning" | "active") => {
         const variants = {
             active: "bg-green-100 text-green-800",
             warning: "bg-yellow-100 text-yellow-800",
