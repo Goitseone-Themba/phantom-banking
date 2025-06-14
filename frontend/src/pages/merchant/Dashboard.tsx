@@ -1,5 +1,5 @@
 import { StatsCard } from "@/components/admin/statistics-component";
-import { IncomeGraph } from "@/components/income-graph";
+import { IncomeGraph } from "@/components/merchants/income-graph";
 
 import { PersonStanding, Wallet } from "lucide-react";
 
