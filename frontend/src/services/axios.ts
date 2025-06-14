@@ -1,40 +1,42 @@
-import axios from 'axios';
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
+const baseUri = 'http://localhost:8000/api/v1'
+const HTTP = axios.create({
+    baseURL:baseUri,
+    timeout:1000,
+    withCredentials:true
 
-export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
-});
+})
 
-// Type for the error response
-export interface ApiError {
-  message: string;
-  code?: string;
-  details?: unknown;
-}
+HTTP.interceptors.request.use(config => {
+    if(config.baseURL === baseUri && !config.headers.Authorization) {
+        const token = localStorage.getItem('token')
+        console.log(token,'did it come like that')
+        if(token) {
+            config.headers.Authorization = `Bearer ${token}`
+        }
 
-// Type guard for API errors
-export function isApiError(error: unknown): error is ApiError {
-  return (
-    typeof error === 'object' &&
-    error !== null &&
-    'message' in error &&
-    typeof (error as ApiError).message === 'string'
-  );
-}
+        return config
+    }
+},
+error => Promise.reject(error)
+)
 
-// Helper to extract error message
-export function getErrorMessage(error: unknown): string {
-  if (isApiError(error)) {
-    return error.message;
-  }
-  if (error instanceof Error) {
-    return error.message;
-  }
-  return 'An unexpected error occurred';
-}
+HTTP.interceptors.response.use(res => {
+    if(res.headers.hasAuthorization()) {
+        localStorage.setItem('token',res.headers.getAuthorization())
+        console.log('res interceptors running',res.headers.getAuthorization())
+        
+    }
+
+    return res
+
+
+},
+err => Promise.reject(err)
+)
+
+
+export {HTTP}
+
+
