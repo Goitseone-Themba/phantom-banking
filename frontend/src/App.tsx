@@ -12,8 +12,8 @@ function App() {
         <AuthProvider>
             <Router>
                 <Routes>
-                    <Route path="*" element={<MerchantHome />} />
-                    <Route path="/login" element={<Login />} />
+                    {/* <Route path="*" element={<MerchantHome />} /> */}
+                    <Route path="*" element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/forgotpassword" element={<ForgotPassword />} />
 
@@ -26,11 +26,11 @@ function App() {
                     </Route>
 
                     <Route element={<ProtectedRoute allowedRoles={["customer"]} />}>
-                        <Route path="/merchant" element={<CustomerHome/>} />
+                        <Route path="/merchant" element={<CustomerHome />} />
                     </Route>
                 </Routes>
-            </Router >
-        </AuthProvider >
+            </Router>
+        </AuthProvider>
     );
 }
 

@@ -31,10 +31,12 @@ interface RegisterMerchantPayload {
     password: string;
     confirm_password: string;
 }
-const baseUri = "http://192.168.180.221:3000/api/v1";
+const baseUri = "http://127.0.0.1:8000//api/v1";
 
 export async function login(payload: LoginPayload): Promise<LoginResponse> {
-    const response = await axios.post("/auth/login/", payload);
+    const response = await axios.post(baseUri + "/auth/login/", payload, {
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Headers": "/login" },
+    });
     return response.data;
 }
 
