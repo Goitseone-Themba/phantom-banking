@@ -1,0 +1,34 @@
+Welcome to {{ site_name }}!
+
+Hello {{ user.first_name }}!
+
+Welcome to {{ site_name }} - Embedded Accounts for the Unbanked! We're excited to have you join our community and start your digital banking journey with us.
+
+WHAT YOU CAN DO WITH {{ site_name }}:
+- Digital Wallet: Secure and instant money storage
+- QR Payments: Quick and easy payments with QR codes
+- EFT Transfers: Send money to any bank account
+- Merchant Services: Accept payments for your business
+- Transaction History: Track all your financial activities
+- Security Features: Multi-factor authentication and fraud protection
+
+Get Started: {{ frontend_url }}
+
+NEXT STEPS:
+1. Complete your profile setup
+2. Verify your identity for higher limits
+3. Add funds to your wallet
+4. Start making payments and transfers
+
+NEED HELP?
+Our support team is here to help you every step of the way. If you have any questions or need assistance, don't hesitate to reach out to us.
+
+Thank you for choosing {{ site_name }}. We look forward to serving your financial needs!
+
+Best regards,
+The {{ site_name }} Team
+
+---
+This is an automated email. Please do not reply to this message.
+© {{ site_name }}. All rights reserved.
+

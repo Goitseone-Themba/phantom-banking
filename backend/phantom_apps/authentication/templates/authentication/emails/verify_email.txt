@@ -1,0 +1,26 @@
+{{ site_name }} - Email Verification Required
+
+Hello {{ user.first_name }}!
+
+Thank you for registering with {{ site_name }}. To complete your registration and start using our services, please verify your email address.
+
+Verification Link:
+{{ verification_url }}
+
+Alternatively, you can use this verification token:
+{{ token }}
+
+IMPORTANT:
+- This verification link will expire in {{ expires_hours }} hours
+- If you didn't create an account with us, please ignore this email
+- For security reasons, do not share this verification link with anyone
+
+If you need help, please contact our support team.
+
+Best regards,
+The {{ site_name }} Team
+
+---
+This is an automated email. Please do not reply to this message.
+© {{ site_name }}. All rights reserved.
+

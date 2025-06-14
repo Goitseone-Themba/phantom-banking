@@ -1,0 +1,6 @@
+from django.apps import AppConfig
+
+class CustomersConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'phantom_apps.customers'
+    verbose_name = 'Customers'
