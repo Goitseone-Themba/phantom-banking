@@ -36,7 +36,6 @@ export default function APIUsageDashboard({
     apiData: APIKEYFormat[];
     heatlhData: HEALTHDATAFormat[];
 }) {
-    const totalRequests =   
     const getUsageColor = (usage: number, limit: number) => {
         const percentage = (usage / limit) * 100;
         if (percentage >= 90) return "bg-red-500";
