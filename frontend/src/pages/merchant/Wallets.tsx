@@ -1,10 +1,7 @@
-import { WalletTable } from "@/components/debit-wallets-table";
+import { WalletTable } from "@/components/payments/debit-wallets-table";
 import { SearchBar } from "@/components/search-bar";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 import { useMemo, useState } from "react";
-import { InfoCard } from "@/components/info-card";
 import { Link } from "react-router-dom";
 
 const customerWallets = [

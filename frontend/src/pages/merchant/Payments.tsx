@@ -1,5 +1,5 @@
-import { EftPayment, PayBackViaEft } from "@/components/eft-payment";
-import { DisburseViaQrCode, PayViaQrCode } from "@/components/qr-code-payment";
+import { EftPayment, PayBackViaEft } from "@/components/payments/eft-payment";
+import { DisburseViaQrCode, PayViaQrCode } from "@/components/payments/qr-code-payment";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export function Payments() {
     return (
