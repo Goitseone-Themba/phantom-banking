@@ -50,6 +50,14 @@ export interface RecentTransactionsStats {
 }
 // Dashboard Overview Component
 export function DashboardOverview({ stats, recentTransactions }: any) {
+    // useEffect(() => {
+    //     fetch("", {
+    //         method: "GET",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //     });
+    // }, []);
     return (
         <div className="p-6 ml-64">
             {/* Stats Grid */}

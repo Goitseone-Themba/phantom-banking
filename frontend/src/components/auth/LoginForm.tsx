@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { authService } from "@/services/auth";
 import { getErrorMessage } from "@/services/axios";
-
 // Form validation schemas
 const loginSchema = z.object({
     username_or_email: z.string().min(1, "Username or email is required"),
@@ -21,8 +20,10 @@ export function LoginForm() {
     const [stage, setStage] = useState<LoginStage>("credentials");
     const [error, setError] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
+    const [email, setEmail] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
 
-    // Handle credentials submission
     const handleCredentialsSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError("");
@@ -34,18 +35,14 @@ export function LoginForm() {
             password: formData.get("password") as string,
         };
 
-        // try {
-        //     // Validate input
-        //     loginSchema.parse(data);
-
-        //     // Attempt login
-        //     await authService.login(data);
-        //     setStage("otp");
-        // } catch (error) {
-        //     setError(getErrorMessage(error));
-        // } finally {
-        //     setIsLoading(false);
-        // }
+        console.log(
+            "Sending This Data to the server: ",
+            JSON.stringify({
+                username: username,
+                email: email,
+                password: password,
+            })
+        );
     };
 
     // Handle OTP submission
@@ -96,14 +93,33 @@ export function LoginForm() {
                             htmlFor="username_or_email"
                             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
-                            Username or Email
+                            Username
                         </label>
                         <input
-                            id="username_or_email"
-                            name="username_or_email"
+                            id="username"
+                            name="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                             type="text"
                             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             placeholder="Enter your username or email"
+                            disabled={isLoading}
+                        />
+
+                        <label
+                            htmlFor="email"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                            Email
+                        </label>
+                        <input
+                            value={email}
+                            id="email"
+                            name="email"
+                            type="email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="Enter your email"
                             disabled={isLoading}
                         />
                     </div>
@@ -115,9 +131,12 @@ export function LoginForm() {
                             Password
                         </label>
                         <input
+                            value={password}
+                            required
                             id="password"
                             name="password"
                             type="password"
+                            onChange={(e) => setPassword(e.target.value)}
                             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             placeholder="Enter your password"
                             disabled={isLoading}
