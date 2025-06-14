@@ -2,31 +2,42 @@
 
 ## 📁 **Step 1: Create the Analytics App Structure**
 
-In your `phantom_apps` folder, create this complete structure:
+In your existing `phantom_apps` folder (alongside your other apps), create this complete structure:
 
 ```
-phantom_apps/
-├── analytics/
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── models.py
-│   ├── views.py
-│   ├── urls.py
-│   ├── serializers.py
-│   ├── utils.py
-│   ├── migrations/
-│   │   └── __init__.py
-│   └── templates/
-│       └── analytics/
-│           ├── base.html
-│           ├── dashboard.html
-│           └── customer_detail.html
+backend/
+├── phantom_apps/
+│   ├── authentication/
+│   ├── common/
+│   ├── customers/
+│   ├── kyc/
+│   ├── merchants/
+│   ├── mock_systems/
+│   ├── monitoring/
+│   ├── transactions/
+│   ├── wallets/
+│   ├── analytics/          # ← Add this new folder
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   ├── serializers.py
+│   │   ├── utils.py
+│   │   ├── migrations/
+│   │   │   └── __init__.py
+│   │   └── templates/
+│   │       └── analytics/
+│   │           ├── base.html
+│   │           ├── dashboard.html
+│   │           └── customer_detail.html
+│   └── __init__.py
 ```
 
 ## 📝 **Step 2: Update Main Settings**
 
-**Edit your main `settings.py` file** (likely in your project root or main config folder):
+**Edit your main `settings.py` file** (likely in your `backend` folder or main config folder):
 
 ```python
 # Add to INSTALLED_APPS
@@ -39,13 +50,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',  # If you're using DRF
     
-    # Your existing apps
+    # Your existing phantom_apps
+    'phantom_apps.authentication',
     'phantom_apps.common',
     'phantom_apps.customers',
-    'phantom_apps.finance_data',
     'phantom_apps.kyc',
     'phantom_apps.merchants',
     'phantom_apps.mock_systems',
+    'phantom_apps.monitoring',
     'phantom_apps.transactions',
     'phantom_apps.wallets',
     
