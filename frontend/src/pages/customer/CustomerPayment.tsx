@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { TransactionsTable, transactionsTableFormat } from "@/components/merchants/transactions-table";
 
 export function CustomerPayment() {
@@ -52,4 +53,13 @@ export function CustomerPayment() {
             <TransactionsTable tabledata={dummyTransactions} />
         </div>
     );
+=======
+
+
+export function CustomerPayment() {
+return (
+
+)
+
+>>>>>>> f5ab412 (auth)
 }
