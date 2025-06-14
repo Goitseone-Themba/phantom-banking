@@ -1,17 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { z } from "zod";
-import { authService } from "@/services/auth";
-import { getErrorMessage } from "@/services/axios";
-// Form validation schemas
-const loginSchema = z.object({
-    username_or_email: z.string().min(1, "Username or email is required"),
-    password: z.string().min(1, "Password is required"),
-});
-
-const otpSchema = z.object({
-    otp: z.string().length(6, "OTP must be 6 digits"),
-});
+import { login } from "@/services/auth";
 
 type LoginStage = "credentials" | "otp";
 
@@ -20,9 +9,6 @@ export function LoginForm() {
     const [stage, setStage] = useState<LoginStage>("credentials");
     const [error, setError] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
-    const [email, setEmail] = useState<string>("");
-    const [username, setUsername] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
 
     const handleCredentialsSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -31,45 +17,29 @@ export function LoginForm() {
 
         const formData = new FormData(e.currentTarget);
         const data = {
-            username_or_email: formData.get("username_or_email") as string,
+            email: formData.get("email") as string,
             password: formData.get("password") as string,
         };
 
-        console.log(
-            "Sending This Data to the server: ",
-            JSON.stringify({
-                username: username,
-                email: email,
-                password: password,
+        const attemptToLogin = login(data);
+        attemptToLogin
+            .then((response) => {
+                console.log("Login response:", response);
+                if (response.user_id) {
+                    setStage("otp");
+                } else {
+                    setError("Invalid credentials. Please try again.");
+                }
             })
-        );
+            .catch((err) => {
+                setError(err.message || "An error occurred. Please try again.");
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
-    // Handle OTP submission
-    const handleOTPSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setError("");
-        setIsLoading(true);
-
-        const formData = new FormData(e.currentTarget);
-        const data = {
-            user_id: authService.getUserId() || "",
-            otp: formData.get("otp") as string,
-        };
-
-        try {
-            // Validate input
-            otpSchema.parse(data);
-
-            // Verify OTP
-            await authService.verify2FA(data);
-            navigate("/dashboard");
-        } catch (error) {
-            setError(getErrorMessage(error));
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const handleOTPSubmit = async (e: React.FormEvent<HTMLFormElement>) => {};
 
     return (
         <div className="space-y-6">
@@ -83,6 +53,7 @@ export function LoginForm() {
             </div>
 
             {error && (
+                // toast('')
                 <div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">{error}</div>
             )}
 
@@ -90,34 +61,15 @@ export function LoginForm() {
                 <form onSubmit={handleCredentialsSubmit} className="space-y-4">
                     <div className="space-y-2">
                         <label
-                            htmlFor="username_or_email"
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                            Username
-                        </label>
-                        <input
-                            id="username"
-                            name="username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            type="text"
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            placeholder="Enter your username or email"
-                            disabled={isLoading}
-                        />
-
-                        <label
                             htmlFor="email"
                             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
                             Email
                         </label>
                         <input
-                            value={email}
                             id="email"
                             name="email"
                             type="email"
-                            onChange={(e) => setEmail(e.target.value)}
                             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             placeholder="Enter your email"
                             disabled={isLoading}
@@ -131,12 +83,10 @@ export function LoginForm() {
                             Password
                         </label>
                         <input
-                            value={password}
                             required
                             id="password"
                             name="password"
-                            type="password"
-                            onChange={(e) => setPassword(e.target.value)}
+                            // type="password"
                             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             placeholder="Enter your password"
                             disabled={isLoading}

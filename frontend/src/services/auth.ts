@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setTokens, clearTokens, getRefreshToken } from "@/lib/tokenStorage";
+//import { setTokens, clearTokens, getRefreshToken } from "@/lib/tokenStorage";
 
 interface LoginPayload {
     email: string;
@@ -31,9 +31,10 @@ interface RegisterMerchantPayload {
     password: string;
     confirm_password: string;
 }
+const baseUri = "http://192.168.180.221:3000/api/v1";
 
 export async function login(payload: LoginPayload): Promise<LoginResponse> {
-    const response = await axios.post("/auth/login/", payload);
+    const response = await axios.post(baseUri + "/auth/login/", payload);
     return response.data;
 }
 
