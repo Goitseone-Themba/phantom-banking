@@ -1,0 +1,186 @@
+<!--dashboard.html-->
+{% extends 'analytics/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-chart-line"></i> Financial Analytics Dashboard</h2>
+    <div>
+        <button class="btn btn-primary" onclick="analyzeCustomers()">
+            <i class="fas fa-brain"></i> Run Analysis
+        </button>
+        <a href="{% url 'analytics:export_data' %}" class="btn btn-success">
+            <i class="fas fa-download"></i> Export CSV
+        </a>
+    </div>
+</div>
+
+<!-- Metrics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card metric-card">
+            <div class="card-body text-center">
+                <h5><i class="fas fa-users"></i></h5>
+                <h3>{{ total_customers }}</h3>
+                <p class="mb-0">Total Customers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card metric-card secondary">
+            <div class="card-body text-center">
+                <h5><i class="fas fa-exchange-alt"></i></h5>
+                <h3>{{ total_transactions }}</h3>
+                <p class="mb-0">Transactions</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card metric-card success">
+            <div class="card-body text-center">
+                <h5><i class="fas fa-store"></i></h5>
+                <h3>{{ total_merchants }}</h3>
+                <p class="mb-0">Merchants</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card metric-card warning">
+            <div class="card-body text-center">
+                <h5><i class="fas fa-dollar-sign"></i></h5>
+                <h3>P{{ total_volume|floatformat:0 }}</h3>
+                <p class="mb-0">Total Volume</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Transactions -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-clock"></i> Recent Transactions</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Merchant</th>
+                                <th>Amount</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in recent_transactions %}
+                            <tr>
+                                <td>{{ transaction.customer.first_name }} {{ transaction.customer.last_name }}</td>
+                                <td>{{ transaction.merchant.name }}</td>
+                                <td>
+                                    <span class="badge bg-{% if transaction.transaction_type == 'debit' %}danger{% else %}success{% endif %}">
+                                        P{{ transaction.amount }}
+                                    </span>
+                                </td>
+                                <td>{{ transaction.merchant.get_category_display }}</td>
+                                <td>{{ transaction.transaction_date|date:"M d, Y" }}</td>
+                                <td>
+                                    <a href="{% url 'analytics:customer_detail' transaction.customer.customer_id %}" class="btn btn-sm btn-outline-primary">
+                                        View
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Top Categories -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-pie"></i> Top Spending Categories</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="categoryChart" width="300" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Customer Analysis Section -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-bar"></i> Financial Analysis Overview</h5>
+            </div>
+            <div class="card-body">
+                <div id="analysisResults">
+                    <p class="text-muted">Click "Run Analysis" to generate customer financial insights and risk assessments.</p>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-primary btn-lg" onclick="analyzeCustomers()">
+                            <i class="fas fa-brain"></i> Start Financial Analysis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart Data (Hidden) -->
+<div id="chartData" style="display: none;">
+    {% for category in category_spending %}
+    <div class="category-data" data-label="{{ category.merchant__category|capfirst }}" data-value="{{ category.total }}"></div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Get category data from DOM
+const categoryElements = document.querySelectorAll('.category-data');
+const categoryLabels = [];
+const categoryValues = [];
+
+categoryElements.forEach(element => {
+    categoryLabels.push(element.getAttribute('data-label'));
+    categoryValues.push(parseFloat(element.getAttribute('data-value')));
+});
+
+// Category spending chart
+const categoryData = {
+    labels: categoryLabels,
+    datasets: [{
+        data: categoryValues,
+        backgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#4BC0C0',
+            '#9966FF'
+        ]
+    }]
+};
+
+const categoryChart = new Chart(document.getElementById('categoryChart'), {
+    type: 'doughnut',
+    data: categoryData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

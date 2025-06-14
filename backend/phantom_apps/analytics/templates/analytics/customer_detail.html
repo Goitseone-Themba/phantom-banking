@@ -1,0 +1,249 @@
+<!--customer_detail.html-->
+{% extends 'analytics/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-user"></i> {{ customer.first_name }} {{ customer.last_name }}</h2>
+    <a href="{% url 'analytics:dashboard' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+</div>
+
+<!-- Customer Info -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle"></i> Customer Information</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <td><strong>Email:</strong></td>
+                        <td>{{ customer.email }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Employment:</strong></td>
+                        <td>{{ customer.get_employment_status_display }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Annual Income:</strong></td>
+                        <td>P{{ customer.annual_income|floatformat:0 }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Credit Score:</strong></td>
+                        <td>{{ customer.credit_score }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Account Balance:</strong></td>
+                        <td>P{{ customer.account_balance }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-line"></i> Financial Analysis</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <td><strong>Total Spending:</strong></td>
+                        <td>P{{ analysis.total_spending }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Avg Monthly:</strong></td>
+                        <td>P{{ analysis.avg_monthly_spending }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Top Category:</strong></td>
+                        <td>{{ analysis.top_spending_category }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Spending Trend:</strong></td>
+                        <td>
+                            <span class="badge bg-{% if analysis.spending_trend == 'increasing' %}danger{% elif analysis.spending_trend == 'decreasing' %}success{% else %}warning{% endif %}">
+                                {{ analysis.spending_trend|capfirst }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Risk Level:</strong></td>
+                        <td>
+                            <span class="badge bg-{% if analysis.risk_level == 'high' %}danger{% elif analysis.risk_level == 'medium' %}warning{% else %}success{% endif %}">
+                                {{ analysis.risk_level|capfirst }}
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Spending by Category -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-pie"></i> Spending by Category</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="spendingChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-area"></i> Monthly Spending Trend</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="trendChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Transactions -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-list"></i> Recent Transactions</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Merchant</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction.transaction_date|date:"M d, Y" }}</td>
+                                <td>{{ transaction.merchant.name }}</td>
+                                <td>{{ transaction.merchant.get_category_display }}</td>
+                                <td>P{{ transaction.amount }}</td>
+                                <td>
+                                    <span class="badge bg-{% if transaction.transaction_type == 'debit' %}danger{% else %}success{% endif %}">
+                                        {{ transaction.transaction_type|capfirst }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden data elements for JavaScript -->
+<div id="spending-data" style="display: none;">
+    <span data-grocery="{{ analysis.grocery_spending }}"></span>
+    <span data-restaurant="{{ analysis.restaurant_spending }}"></span>
+    <span data-gas="{{ analysis.gas_spending }}"></span>
+    <span data-retail="{{ analysis.retail_spending }}"></span>
+    <span data-entertainment="{{ analysis.entertainment_spending }}"></span>
+    <span data-other="{{ analysis.other_spending }}"></span>
+</div>
+
+<div id="trend-data" style="display: none;">
+    {% for item in monthly_spending %}
+    <div class="trend-item" data-month="{{ item.month|date:'M Y' }}" data-amount="{{ item.total }}"></div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Get spending data from hidden elements
+const spendingDataEl = document.getElementById('spending-data');
+const grocerySpending = parseFloat(spendingDataEl.querySelector('[data-grocery]').getAttribute('data-grocery'));
+const restaurantSpending = parseFloat(spendingDataEl.querySelector('[data-restaurant]').getAttribute('data-restaurant'));
+const gasSpending = parseFloat(spendingDataEl.querySelector('[data-gas]').getAttribute('data-gas'));
+const retailSpending = parseFloat(spendingDataEl.querySelector('[data-retail]').getAttribute('data-retail'));
+const entertainmentSpending = parseFloat(spendingDataEl.querySelector('[data-entertainment]').getAttribute('data-entertainment'));
+const otherSpending = parseFloat(spendingDataEl.querySelector('[data-other]').getAttribute('data-other'));
+
+// Spending by category chart
+const spendingData = {
+    labels: ['Grocery', 'Restaurant', 'Gas', 'Retail', 'Entertainment', 'Other'],
+    datasets: [{
+        data: [
+            grocerySpending,
+            restaurantSpending,
+            gasSpending,
+            retailSpending,
+            entertainmentSpending,
+            otherSpending
+        ],
+        backgroundColor: [
+            '#FF6384',
+            '#36A2EB', 
+            '#FFCE56',
+            '#4BC0C0',
+            '#9966FF',
+            '#FF9F40'
+        ]
+    }]
+};
+
+new Chart(document.getElementById('spendingChart'), {
+    type: 'pie',
+    data: spendingData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
+// Get trend data from hidden elements
+const trendItems = document.querySelectorAll('.trend-item');
+const trendLabels = [];
+const trendValues = [];
+
+trendItems.forEach(item => {
+    trendLabels.push(item.getAttribute('data-month'));
+    trendValues.push(parseFloat(item.getAttribute('data-amount')));
+});
+
+// Monthly trend chart
+const trendData = {
+    labels: trendLabels,
+    datasets: [{
+        label: 'Monthly Spending',
+        data: trendValues,
+        borderColor: '#36A2EB',
+        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+        fill: true
+    }]
+};
+
+new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: trendData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endblock %}
