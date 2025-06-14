@@ -8,7 +8,7 @@ export function CustomerTransaction() {
             amount: 150.75,
             walletId: "WAL123",
             type: "credit",
-            status: "completed"
+            status: "completed",
         },
         {
             transactionId: "TXN002",
@@ -16,23 +16,23 @@ export function CustomerTransaction() {
             amount: 89.99,
             walletId: "WAL456",
             type: "debit",
-            status: "pending"
+            status: "pending",
         },
         {
             transactionId: "TXN003",
             date: "2025-06-11",
-            amount: 250.00,
+            amount: 250.0,
             walletId: "WAL123",
             type: "credit",
-            status: "completed"
+            status: "completed",
         },
         {
             transactionId: "TXN004",
             date: "2025-06-10",
-            amount: 45.50,
+            amount: 45.5,
             walletId: "WAL789",
             type: "debit",
-            status: "completed"
+            status: "completed",
         },
         {
             transactionId: "TXN005",
@@ -40,16 +40,16 @@ export function CustomerTransaction() {
             amount: 300.25,
             walletId: "WAL456",
             type: "credit",
-            status: "pending"
-        }
+            status: "pending",
+        },
     ];
 
     return (
         <div className="w-[inherit] h-auto flex flex-nowrap justify-start p-8 gap-6 flex-col">
-            <h2 className="roboto-heading text-6xl font-bold">Customer Payment</h1>
+            <h2 className="roboto-heading text-6xl font-bold">Customer Payment</h2>
             <p className="roboto-text text-accent-foreground">Manage your payments and transactions</p>
 
             <TransactionsTable tabledata={dummyTransactions} />
         </div>
-    )
+    );
 }

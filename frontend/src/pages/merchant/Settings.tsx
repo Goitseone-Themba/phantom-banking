@@ -25,7 +25,7 @@ export function Settings() {
             description: "You are advised not to share it, and update all code reliant on it.",
             action: {
                 label: "Copy",
-                onclick: copyAPIKEY(),
+                onClick: copyAPIKEY(),
             },
         });
     };

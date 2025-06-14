@@ -49,13 +49,7 @@ export interface RecentTransactionsStats {
     status: "completed" | "failed" | "pending";
 }
 // Dashboard Overview Component
-export function DashboardOverview({
-    stats,
-    recentTransactions,
-}: {
-    stats: DashBoardStats;
-    recentTransaction: RecentTransactionsStats[];
-}) {
+export function DashboardOverview({ stats, recentTransactions }: any) {
     return (
         <div className="p-6 ml-64">
             {/* Stats Grid */}
@@ -98,111 +92,43 @@ export function DashboardOverview({
                     </div>
                     <div className="p-6">
                         <div className="space-y-4">
-                            {recentTransactions.map(
-                                (transaction: {
-                                    id: Key | null | undefined;
-                                    user:
-                                        | string
-                                        | number
-                                        | bigint
-                                        | boolean
-                                        | ReactElement<unknown, string | JSXElementConstructor<any>>
-                                        | Iterable<ReactNode>
-                                        | Promise<
-                                              | string
-                                              | number
-                                              | bigint
-                                              | boolean
-                                              | ReactPortal
-                                              | ReactElement<unknown, string | JSXElementConstructor<any>>
-                                              | Iterable<ReactNode>
-                                              | null
-                                              | undefined
-                                          >
-                                        | null
-                                        | undefined;
-                                    time:
-                                        | string
-                                        | number
-                                        | bigint
-                                        | boolean
-                                        | ReactElement<unknown, string | JSXElementConstructor<any>>
-                                        | Iterable<ReactNode>
-                                        | ReactPortal
-                                        | Promise<
-                                              | string
-                                              | number
-                                              | bigint
-                                              | boolean
-                                              | ReactPortal
-                                              | ReactElement<unknown, string | JSXElementConstructor<any>>
-                                              | Iterable<ReactNode>
-                                              | null
-                                              | undefined
-                                          >
-                                        | null
-                                        | undefined;
-                                    amount: number;
-                                    status:
-                                        | string
-                                        | number
-                                        | bigint
-                                        | boolean
-                                        | ReactElement<unknown, string | JSXElementConstructor<any>>
-                                        | Iterable<ReactNode>
-                                        | Promise<
-                                              | string
-                                              | number
-                                              | bigint
-                                              | boolean
-                                              | ReactPortal
-                                              | ReactElement<unknown, string | JSXElementConstructor<any>>
-                                              | Iterable<ReactNode>
-                                              | null
-                                              | undefined
-                                          >
-                                        | null
-                                        | undefined;
-                                }) => (
-                                    <div key={transaction.id} className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-3">
-                                            <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
-                                                <span className="text-xs font-medium">
-                                                    {transaction.user[0]}
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <p className="text-sm font-medium text-gray-900">
-                                                    {transaction.user}
-                                                </p>
-                                                <p className="text-xs text-gray-500">{transaction.time}</p>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <p
-                                                className={`text-sm font-medium ${
-                                                    transaction.amount > 0
-                                                        ? "text-green-600"
-                                                        : "text-red-600"
-                                                }`}
-                                            >
-                                                ${Math.abs(transaction.amount).toLocaleString()}
-                                            </p>
-                                            <span
-                                                className={`inline-block px-2 py-1 text-xs rounded-full ${
-                                                    transaction.status === "completed"
-                                                        ? "bg-green-100 text-green-800"
-                                                        : transaction.status === "pending"
-                                                        ? "bg-yellow-100 text-yellow-800"
-                                                        : "bg-red-100 text-red-800"
-                                                }`}
-                                            >
-                                                {transaction.status}
+                            {recentTransactions.map((transaction: any) => (
+                                <div key={transaction.id} className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
+                                            <span className="text-xs font-medium">
+                                                {transaction.user[0]}
                                             </span>
                                         </div>
+                                        <div>
+                                            <p className="text-sm font-medium text-gray-900">
+                                                {transaction.user}
+                                            </p>
+                                            <p className="text-xs text-gray-500">{transaction.time}</p>
+                                        </div>
                                     </div>
-                                )
-                            )}
+                                    <div className="text-right">
+                                        <p
+                                            className={`text-sm font-medium ${
+                                                transaction.amount > 0 ? "text-green-600" : "text-red-600"
+                                            }`}
+                                        >
+                                            ${Math.abs(transaction.amount).toLocaleString()}
+                                        </p>
+                                        <span
+                                            className={`inline-block px-2 py-1 text-xs rounded-full ${
+                                                transaction.status === "completed"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : transaction.status === "pending"
+                                                    ? "bg-yellow-100 text-yellow-800"
+                                                    : "bg-red-100 text-red-800"
+                                            }`}
+                                        >
+                                            {transaction.status}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>

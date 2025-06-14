@@ -1,7 +1,7 @@
 import { ChartBar, Receipt, BadgeHelp, Home, Hourglass, Settings, Wallet, Users, Bell } from "lucide-react";
 import { DashboardOverview } from "@/components/admin/dashboard-overview";
 import { UserManagement, UserStats } from "@/components/admin/user-managemnet";
-
+import { useState } from "react";
 // Sidebar Component
 function AdminSidebar({ activeSection, setActiveSection }) {
     const menuItems = [
@@ -216,12 +216,9 @@ const alertsData = [
 
 // Main Admin Dashboard Component
 export default function AdminDashboard() {
-    const [activeSection, setActiveSection] = useState("dashboard");
-
+    const [activeSection] = useState("users"); // Default active section
     const renderContent = () => {
         switch (activeSection) {
-            case "dashboard":
-                return <DashboardOverview stats={dashboardStats} recentTransaction={recentTransactions} />;
             case "users":
                 return <UserManagement users={users} />;
             case "wallets":
@@ -234,10 +231,16 @@ export default function AdminDashboard() {
                 return <ReportsAnalytics />;
             case "settings":
                 return <SystemSettings />;
-            case "support":
-                return <HelpSupport />;
+            default:
+                return <DashboardOverview stats={dashboardStats} recentTransactions={recentTransactions} />;
         }
     };
 
-    return <div className="min-h-screen bg-gray-50">{renderContent()}</div>;
+    return (
+        <div className="min-h-screen bg-gray-50">
+            <AdminSidebar activeSection={activeSection} setActiveSection={() => {}} />
+            <AdminHeader activeSection={activeSection} />
+            {renderContent()}
+        </div>
+    );
 }

@@ -9,7 +9,7 @@ import { Transactions } from "./merchant/Transactions";
 import { Settings } from "./merchant/Settings";
 import { CreateWallet } from "./merchant/CreateWallet";
 
-export function Home() {
+export function MerchantHome() {
     return (
         <SidebarProvider>
             <AppSidebar />
