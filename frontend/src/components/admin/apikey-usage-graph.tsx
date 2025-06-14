@@ -14,19 +14,22 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Activity, TrendingUp, Clock } from "lucide-react";
 
-interface APIKEYFormat {
+export interface APIKEYFormat {
     id: string;
     name: string;
     usage: number;
     limit: number;
     status: "warning" | "active";
+
+    date: string;
+    latency: number;
+    errors: string | number;
 }
 
-interface HEALTHDATAFormat {
+export interface HEALTHDATAFormat {
     errors: number;
-    date: Date;
+    date: string;
     latency: number;
-    erros: number;
 }
 
 export default function APIUsageDashboard({
@@ -36,6 +39,25 @@ export default function APIUsageDashboard({
     apiData: APIKEYFormat[];
     heatlhData: HEALTHDATAFormat[];
 }) {
+    // Prepare data for charts
+    const data = heatlhData.map((d) => ({
+        date: new Date(d.date).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+        }),
+        requests: (d as any).requests ?? 0,
+        latency: d.latency,
+        errors: d.errors ?? (d as any).erros ?? 0,
+    }));
+
+    const totalRequests = data.reduce((sum, d) => sum + d.requests, 0);
+    const avgLatency =
+        data.length > 0 ? Math.round(data.reduce((sum, d) => sum + d.latency, 0) / data.length) : 0;
+    const errorRate =
+        totalRequests > 0
+            ? ((data.reduce((sum, d) => sum + d.errors, 0) / totalRequests) * 100).toFixed(2)
+            : "0.00";
+
     const getUsageColor = (usage: number, limit: number) => {
         const percentage = (usage / limit) * 100;
         if (percentage >= 90) return "bg-red-500";
@@ -53,7 +75,7 @@ export default function APIUsageDashboard({
     };
 
     return (
-        <div className="flex flex-nowrap flex-col gap-6">
+        <div className="flex flex-nowrap flex-col gap-6 w-2xl">
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">API Usage Dashboard</h1>
@@ -100,8 +122,6 @@ export default function APIUsageDashboard({
                     </CardContent>
                 </Card>
             </div>
-
-            {/* Charts */}
             <Tabs defaultValue="requests" className="space-y-4">
                 <TabsList>
                     <TabsTrigger value="requests">Request Volume</TabsTrigger>
@@ -191,51 +211,39 @@ export default function APIUsageDashboard({
                 </TabsContent>
             </Tabs>
 
-            {/* API Keys List */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>API Key Usage</CardTitle>
-                    <CardDescription>Current usage for each API key</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-4">
-                        {apiKeys.map((key) => {
-                            const usagePercentage = (key.usage / key.limit) * 100;
-                            return (
-                                <div
-                                    key={key.id}
-                                    className="flex items-center justify-between p-4 border rounded-lg"
-                                >
-                                    <div className="flex items-center space-x-4">
-                                        <div>
-                                            <h4 className="font-medium">{key.name}</h4>
-                                            <p className="text-sm text-muted-foreground">
-                                                {key.usage.toLocaleString()} / {key.limit.toLocaleString()}{" "}
-                                                requests
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-4">
-                                        <div className="w-32 bg-gray-200 rounded-full h-2">
-                                            <div
-                                                className={`h-2 rounded-full ${getUsageColor(
-                                                    key.usage,
-                                                    key.limit
-                                                )}`}
-                                                style={{ width: `${Math.min(usagePercentage, 100)}%` }}
-                                            />
-                                        </div>
-                                        <span className="text-sm font-medium">
-                                            {Math.round(usagePercentage)}%
-                                        </span>
-                                        <Badge className={getStatusBadge(key.status)}>{key.status}</Badge>
-                                    </div>
+            <div className="space-y-4">
+                {apiData.map((key) => {
+                    const usagePercentage = (key.usage / key.limit) * 100;
+                    return (
+                        <div
+                            key={key.id}
+                            className="flex items-center justify-between p-4 border rounded-lg"
+                        >
+                            <div className="flex items-center space-x-4">
+                                <div>
+                                    <h4 className="font-medium">{key.name}</h4>
+                                    <p className="text-sm text-muted-foreground">
+                                        {key.usage.toLocaleString()} / {key.limit.toLocaleString()} requests
+                                    </p>
                                 </div>
-                            );
-                        })}
-                    </div>
-                </CardContent>
-            </Card>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                                <div className="w-32 bg-gray-200 rounded-full h-2">
+                                    <div
+                                        className={`h-2 rounded-full ${getUsageColor(
+                                            key.usage,
+                                            key.limit
+                                        )}`}
+                                        style={{ width: `${Math.min(usagePercentage, 100)}%` }}
+                                    />
+                                </div>
+                                <span className="text-sm font-medium">{Math.round(usagePercentage)}%</span>
+                                <Badge className={getStatusBadge(key.status)}>{key.status}</Badge>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 }

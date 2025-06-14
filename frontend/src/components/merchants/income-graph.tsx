@@ -35,7 +35,7 @@ const chartConfig = {
     },
 } satisfies ChartConfig;
 
-export function BankingSpendingChart() {
+export function IncomeGraph() {
     const currentSpending = chartData[chartData.length - 1].spending;
     const previousSpending = chartData[chartData.length - 2].spending;
     const spendingChange = ((currentSpending - previousSpending) / previousSpending) * 100;

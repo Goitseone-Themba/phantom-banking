@@ -1,4 +1,4 @@
-export function AdminHeader({ activeSection }) {
+export function AdminHeader({ activeSection }: { activeSection: any }) {
     return (
         <div className="bg-white shadow-sm border-b px-6 py-4 ml-64">
             <div className="flex items-center justify-between">

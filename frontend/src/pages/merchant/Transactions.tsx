@@ -1,5 +1,5 @@
 import { SearchBar } from "@/components/search-bar";
-import { TransactionsTable, type transactionsTableFormat } from "@/components/transactions-table";
+import { TransactionsTable, type transactionsTableFormat } from "@/components/merchants/transactions-table";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";

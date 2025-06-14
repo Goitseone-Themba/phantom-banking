@@ -1,5 +1,5 @@
 import { ChartBar, Receipt, Home, Hourglass, Settings, Wallet, ChevronUp, User2 } from "lucide-react";
-import { PhantomBankingLogo } from "./ui/sidebar-label";
+import { PhantomBankingLogo } from "../ui/sidebar-label";
 import { Link } from "react-router-dom";
 import {
     Sidebar,
@@ -20,7 +20,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 
 const items = [
     {

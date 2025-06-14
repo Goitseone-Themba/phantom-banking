@@ -4,12 +4,12 @@ import { CustomerTransaction } from "./customer/CustomerTransaction";
 import { CustomerWallet } from "./customer/CustomerWallet";
 import { Dashboard } from "./merchant/Dashboard";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/merchants/merchant-sidebar";
 
 export function CustomerHome() {
     return (
         <SidebarProvider>
-            <AppSidebar/>
+            <AppSidebar />
             <main
                 style={{
                     width: "-webkit-fill-available",

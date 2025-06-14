@@ -1,4 +1,4 @@
-import { CreateWalletForm } from "@/components/payments/create-wallet-form";
+import { CreateWalletForm } from "@/components/merchants/create-wallet-form";
 
 export function CreateWallet() {
     return (

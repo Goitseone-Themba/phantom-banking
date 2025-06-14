@@ -6,15 +6,16 @@ interface StatisticsCard {
     change: number;
     icon: any;
     trend: "up" | "down";
+    className?: "" | undefined;
 }
 
 // Icon type is a valid Lucid Icon Element
 
-export function StatsCard({ title, value, change, icon: Icon, trend }: StatisticsCard) {
+export function StatsCard({ title, value, change, icon: Icon, trend, className }: StatisticsCard) {
     const isPositive = trend === "up";
 
     return (
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className={`bg-white rounded-lg shadow p-6 ${className ? className : ""}`}>
             <div className="flex items-center justify-between">
                 <div>
                     <p className="text-sm font-medium text-gray-600">{title}</p>

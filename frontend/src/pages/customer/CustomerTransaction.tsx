@@ -1,4 +1,4 @@
-import { TransactionsTable, transactionsTableFormat } from "@/components/transactions-table";
+import { TransactionsTable, transactionsTableFormat } from "@/components/merchants/transactions-table";
 
 export function CustomerTransaction() {
     const dummyTransactions: transactionsTableFormat[] = [

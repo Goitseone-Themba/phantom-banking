@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login } from "./pages/Login";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import { Businesses } from "./pages/admin/Businesses";
 import { MerchantHome } from "./pages/MerchantHome";
 
 import { ForgotPassword } from "./pages/ForgotPassword";
@@ -23,7 +22,6 @@ function App() {
                 <Route path="/customer/home/transactions" element={<CustomerHome />} />
                 <Route path="forgotpassword" element={<ForgotPassword />} />
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                <Route path="/admin/businesses" element={<Businesses />} />
             </Routes>
         </Router>
     );

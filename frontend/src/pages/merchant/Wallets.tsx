@@ -1,4 +1,4 @@
-import { WalletTable } from "@/components/payments/debit-wallets-table";
+import { WalletTable } from "@/components/merchants/debit-wallets-table";
 import { SearchBar } from "@/components/search-bar";
 import { Button } from "@/components/ui/button";
 import { useMemo, useState } from "react";

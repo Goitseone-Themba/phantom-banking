@@ -1,14 +1,17 @@
-import { ChartBar, Receipt, BadgeHelp, Home, Hourglass, Settings, Wallet, Users } from "lucide-react";
+import { ChartBar, Receipt, Home, Settings, Wallet, Users } from "lucide-react";
 
-export function AdminSidebar({ activeSection, setActiveSection }) {
+export function AdminSidebar({
+    activeSection,
+    setActiveSection,
+}: {
+    activeSection: string;
+    setActiveSection: (section: string) => void;
+}) {
     const menuItems = [
         { id: "dashboard", title: "Dashboard", icon: Home },
         { id: "users", title: "User Management", icon: Users },
-        { id: "wallets", title: "Wallet Management", icon: Wallet },
         { id: "transactions", title: "Transactions", icon: Receipt },
-
-        { id: "reports", title: "Reports & Analytics", icon: ChartBar },
-        { id: "settings", title: "System Settings", icon: Settings },
+        { id: "apiusage", title: "API Usage & Analytics", icon: ChartBar },
     ];
 
     return (

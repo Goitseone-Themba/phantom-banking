@@ -1,9 +1,6 @@
-import { TransactionsTable, transactionsTableFormat } from "@/components/transactions-table"
-
-
+import { TransactionsTable, transactionsTableFormat } from "@/components/merchants/transactions-table";
 
 export function CustomerPayment() {
-
     const dummyTransactions: transactionsTableFormat[] = [
         {
             transactionId: "TXN001",
@@ -11,7 +8,7 @@ export function CustomerPayment() {
             amount: 150.75,
             walletId: "WAL123",
             type: "credit",
-            status: "completed"
+            status: "completed",
         },
         {
             transactionId: "TXN002",
@@ -19,23 +16,23 @@ export function CustomerPayment() {
             amount: 89.99,
             walletId: "WAL456",
             type: "debit",
-            status: "pending"
+            status: "pending",
         },
         {
             transactionId: "TXN003",
             date: "2025-06-11",
-            amount: 250.00,
+            amount: 250.0,
             walletId: "WAL123",
             type: "credit",
-            status: "completed"
+            status: "completed",
         },
         {
             transactionId: "TXN004",
             date: "2025-06-10",
-            amount: 45.50,
+            amount: 45.5,
             walletId: "WAL789",
             type: "debit",
-            status: "completed"
+            status: "completed",
         },
         {
             transactionId: "TXN005",
@@ -43,8 +40,8 @@ export function CustomerPayment() {
             amount: 300.25,
             walletId: "WAL456",
             type: "credit",
-            status: "pending"
-        }
+            status: "pending",
+        },
     ];
 
     return (
@@ -54,6 +51,5 @@ export function CustomerPayment() {
 
             <TransactionsTable tabledata={dummyTransactions} />
         </div>
-    )
-
+    );
 }
