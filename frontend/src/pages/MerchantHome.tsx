@@ -7,7 +7,7 @@ import { Payments } from "./merchant/Payments";
 import { Reports } from "./merchant/Reports";
 import { Transactions } from "./merchant/Transactions";
 import { Settings } from "./merchant/Settings";
-import { CreateWallet } from "./merchant/CreateWallet";
+import { CreateWallet } from "./customer/CreateWallet";
 
 export function MerchantHome() {
     return (

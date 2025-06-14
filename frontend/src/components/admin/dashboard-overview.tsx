@@ -177,20 +177,12 @@ export function DashboardOverview({ stats, recentTransactions }: any) {
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <button className="flex items-center justify-center space-x-2 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors">
-                        <Plus className="h-5 w-5 text-gray-400" />
-                        <span className="text-sm font-medium text-gray-600">Add User</span>
-                    </button>
-                    <button className="flex items-center justify-center space-x-2 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors">
                         <Download className="h-5 w-5 text-gray-400" />
                         <span className="text-sm font-medium text-gray-600">Export Data</span>
                     </button>
                     <button className="flex items-center justify-center space-x-2 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors">
                         <Settings className="h-5 w-5 text-gray-400" />
                         <span className="text-sm font-medium text-gray-600">System Config</span>
-                    </button>
-                    <button className="flex items-center justify-center space-x-2 p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors">
-                        <ChartBar className="h-5 w-5 text-gray-400" />
-                        <span className="text-sm font-medium text-gray-600">View Reports</span>
                     </button>
                 </div>
             </div>

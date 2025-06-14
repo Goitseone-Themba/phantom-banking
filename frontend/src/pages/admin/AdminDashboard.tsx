@@ -1,76 +1,11 @@
-import { ChartBar, Receipt, BadgeHelp, Home, Hourglass, Settings, Wallet, Users, Bell } from "lucide-react";
 import { DashboardOverview } from "@/components/admin/dashboard-overview";
 import { UserManagement, UserStats } from "@/components/admin/user-managemnet";
 import { useState } from "react";
+import { AdminHeader } from "@/components/admin/admin-header";
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
 // Sidebar Component
-function AdminSidebar({ activeSection, setActiveSection }) {
-    const menuItems = [
-        { id: "dashboard", title: "Dashboard", icon: Home },
-        { id: "users", title: "User Management", icon: Users },
-        { id: "wallets", title: "Wallet Management", icon: Wallet },
-        { id: "transactions", title: "Transactions", icon: Receipt },
-        { id: "payments", title: "Payment Systems", icon: Hourglass },
-        { id: "reports", title: "Reports & Analytics", icon: ChartBar },
-        { id: "settings", title: "System Settings", icon: Settings },
-        { id: "support", title: "Help & Support", icon: BadgeHelp },
-    ];
-
-    return (
-        <div className="w-64 bg-white shadow-lg h-screen fixed left-0 top-0 z-50">
-            <div className="p-6 border-b">
-                <h1 className="text-xl font-bold text-gray-800">Phantom Banking</h1>
-                <p className="text-sm text-gray-500">Admin Dashboard</p>
-            </div>
-
-            <nav className="mt-6">
-                {menuItems.map((item) => (
-                    <button
-                        key={item.id}
-                        onClick={() => setActiveSection(item.id)}
-                        className={`w-full flex items-center px-6 py-3 text-left hover:bg-blue-50 transition-colors ${
-                            activeSection === item.id
-                                ? "bg-blue-100 border-r-2 border-blue-500 text-blue-700"
-                                : "text-gray-700"
-                        }`}
-                    >
-                        <item.icon className="h-5 w-5 mr-3" />
-                        {item.title}
-                    </button>
-                ))}
-            </nav>
-        </div>
-    );
-}
 
 // Header Component
-function AdminHeader({ activeSection }) {
-    return (
-        <div className="bg-white shadow-sm border-b px-6 py-4 ml-64">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h2 className="text-2xl font-semibold text-gray-800 capitalize">
-                        {activeSection.replace("-", " ")}
-                    </h2>
-                    <p className="text-gray-500">Manage your banking platform</p>
-                </div>
-
-                <div className="flex items-center space-x-4">
-                    <div className="relative">
-                        <Bell className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-600" />
-                        <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                        <div className="h-8 w-8 bg-blue-500 rounded-full flex items-center justify-center">
-                            <span className="text-white text-sm font-medium">A</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-700">Admin User</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
 
 // Placeholder components for other sections
 function WalletManagement() {
@@ -92,17 +27,6 @@ function TransactionManagement() {
             <div className="bg-white rounded-lg shadow p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Transaction Management</h3>
                 <p className="text-gray-600">Monitor and manage all platform transactions.</p>
-            </div>
-        </div>
-    );
-}
-
-function PaymentSystems() {
-    return (
-        <div className="p-6 ml-64">
-            <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Payment Systems</h3>
-                <p className="text-gray-600">Configure and manage payment methods and integrations.</p>
             </div>
         </div>
     );
@@ -216,7 +140,7 @@ const alertsData = [
 
 // Main Admin Dashboard Component
 export default function AdminDashboard() {
-    const [activeSection] = useState("users"); // Default active section
+    const [activeSection] = useState(""); // Default active section
     const renderContent = () => {
         switch (activeSection) {
             case "users":
@@ -225,8 +149,6 @@ export default function AdminDashboard() {
                 return <WalletManagement />;
             case "transactions":
                 return <TransactionManagement />;
-            case "payments":
-                return <PaymentSystems />;
             case "reports":
                 return <ReportsAnalytics />;
             case "settings":
