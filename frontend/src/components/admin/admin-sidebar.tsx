@@ -1,42 +1,140 @@
-import { ChartBar, Receipt, Home, Settings, Wallet, Users } from "lucide-react";
+import { ChartBar, Receipt, Home, Hourglass, Settings, Wallet, ChevronUp, User2 } from "lucide-react";
+import { PhantomBankingLogo } from "../ui/sidebar-label";
+import { Link } from "react-router-dom";
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarTrigger,
+    useSidebar,
+} from "@/components/ui/sidebar";
 
-export function AdminSidebar({
-    activeSection,
-    setActiveSection,
-}: {
-    activeSection: string;
-    setActiveSection: (section: string) => void;
-}) {
-    const menuItems = [
-        { id: "dashboard", title: "Dashboard", icon: Home },
-        { id: "users", title: "User Management", icon: Users },
-        { id: "transactions", title: "Transactions", icon: Receipt },
-        { id: "apiusage", title: "API Usage & Analytics", icon: ChartBar },
-    ];
+import React, { useState } from "react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+
+const items = [
+    {
+        title: "DashBoard",
+        url: "/",
+        icon: Home,
+    },
+    {
+        title: "Wallets",
+        url: "/wallets",
+        icon: Wallet,
+    },
+    {
+        title: "Payments",
+        url: "/payments",
+        icon: Hourglass,
+    },
+    {
+        title: "Transactions",
+        url: "/transactions",
+        icon: Receipt,
+    },
+    {
+        title: "Reports",
+        url: "/reports",
+        icon: ChartBar,
+    },
+    {
+        title: "Settings",
+        url: "/settings",
+        icon: Settings,
+    },
+];
+
+export function AdminSidebar() {
+    const [activeUrl, setActiveUrl] = React.useState(window.location.hash);
+    const { toggleSidebar } = useSidebar();
+    const [userName, setUserName] = useState("OARABILE INC");
+    //setUserName("Oarabile Koore");
+    React.useEffect(() => {
+        const handleHashChange = () => {
+            setActiveUrl(window.location.hash);
+        };
+
+        window.addEventListener("hashchange", handleHashChange);
+
+        return () => {
+            window.removeEventListener("hashchange", handleHashChange);
+        };
+    }, []);
 
     return (
-        <div className="w-64 bg-white shadow-lg h-screen fixed left-0 top-0 z-50">
-            <div className="p-6 border-b">
-                <h1 className="text-xl font-bold text-gray-800">Phantom Banking</h1>
-                <p className="text-sm text-gray-500">Admin Dashboard</p>
-            </div>
-
-            <nav className="mt-6">
-                {menuItems.map((item) => (
-                    <button
-                        key={item.id}
-                        onClick={() => setActiveSection(item.id)}
-                        className={`w-full flex items-center px-6 py-3 text-left hover:bg-blue-50 transition-colors ${
-                            activeSection === item.id
-                                ? "bg-blue-100 border-r-2 border-blue-500 text-blue-700"
-                                : "text-gray-700"
-                        }`}
-                    >
-                        <item.icon className="h-5 w-5 mr-3" />
-                        {item.title}
-                    </button>
-                ))}
-            </nav>
-        </div>
+        <Sidebar collapsible="icon" variant="floating">
+            <SidebarContent>
+                <SidebarGroup>
+                    <SidebarTrigger>
+                        <button onClick={toggleSidebar}>Toggle Sidebar</button>
+                    </SidebarTrigger>
+                    <PhantomBankingLogo></PhantomBankingLogo>
+                    <br></br>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            {items.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton asChild>
+                                        <Link
+                                            style={{
+                                                height: "3rem",
+                                                backgroundColor:
+                                                    activeUrl === item.url ? "#f0f0f0" : "transparent",
+                                                color: activeUrl === item.url ? "black" : "inherit",
+                                                borderRadius: "0.5rem",
+                                                paddingLeft: "1rem",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "0.5rem",
+                                                transition: "background-color 0.2s, color 0.2s",
+                                            }}
+                                            to={item.url}
+                                            onClick={() => setActiveUrl(item.url)}
+                                        >
+                                            <item.icon />
+                                            <span>{item.title}</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+            </SidebarContent>
+            <SidebarFooter>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <SidebarMenuButton>
+                                    <User2 /> {userName}
+                                    <ChevronUp className="ml-auto" />
+                                </SidebarMenuButton>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
+                                <DropdownMenuItem>
+                                    <span>Billing</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <span>Sign out</span>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarFooter>
+        </Sidebar>
     );
 }
+
