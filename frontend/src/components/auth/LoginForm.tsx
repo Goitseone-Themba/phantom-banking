@@ -21,43 +21,45 @@ export function LoginForm() {
             password: formData.get("password") as string,
         };
 
-        // Fixed base URI - removed double slash
-        const baseUri = "http://127.0.0.1:8000/api/v1";
-        console.log(`Submitting login with data:`, JSON.stringify(data, null, 2));
+        const login_credentials = logIn(data.email, data.password);
 
-        try {
-            const response = await fetch(`${baseUri}/auth/login/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    // Removed the incorrect Access-Control-Allow-Headers
-                },
-                credentials: "include", // For CORS with credentials
-                body: JSON.stringify(data), // Send data in request body
-            });
+        // // Fixed base URI - removed double slash
+        // const baseUri = "http://127.0.0.1:8000/api/v1";
+        // console.log(`Submitting login with data:`, JSON.stringify(data, null, 2));
 
-            if (response.ok) {
-                const responseData = await response.json();
-                console.log("Login response:", responseData);
+        // try {
+        //     const response = await fetch(`${baseUri}/auth/login/`, {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             // Removed the incorrect Access-Control-Allow-Headers
+        //         },
+        //         credentials: "include", // For CORS with credentials
+        //         body: JSON.stringify(data), // Send data in request body
+        //     });
 
-                if (responseData) {
-                    setStage("otp");
-                    // Navigate to the OTP verification page or handle accordingly
-                    // navigate("/otp");
-                } else {
-                    setError("Invalid credentials. Please try again.");
-                }
-            } else {
-                const errorResponse = await response.json();
-                console.error("Login error:", errorResponse);
-                setError(errorResponse.detail || "An error occurred. Please try again.");
-            }
-        } catch (err) {
-            console.error("Network error during login request:", err);
-            setError("Network error. Please check your connection and try again.");
-        } finally {
-            setIsLoading(false); // Always reset loading state
-        }
+        //     if (response.ok) {
+        //         const responseData = await response.json();
+        //         console.log("Login response:", responseData);
+
+        //         if (responseData) {
+        //             setStage("otp");
+        //             // Navigate to the OTP verification page or handle accordingly
+        //             // navigate("/otp");
+        //         } else {
+        //             setError("Invalid credentials. Please try again.");
+        //         }
+        //     } else {
+        //         const errorResponse = await response.json();
+        //         console.error("Login error:", errorResponse);
+        //         setError(errorResponse.detail || "An error occurred. Please try again.");
+        //     }
+        // } catch (err) {
+        //     console.error("Network error during login request:", err);
+        //     setError("Network error. Please check your connection and try again.");
+        // } finally {
+        //     setIsLoading(false); // Always reset loading state
+        // }
     };
 
     const handleOTPSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

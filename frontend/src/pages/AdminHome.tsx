@@ -6,7 +6,7 @@ import { AdminSidebar } from "@/components/admin/admin-sidebar";
 export function AdminHome() {
     return (
         <SidebarProvider>
-            <AdminSidebar/>
+            <AdminSidebar />
             <main
                 style={{
                     width: "-webkit-fill-available",
@@ -14,7 +14,7 @@ export function AdminHome() {
                 }}
             >
                 <Routes>
-                    <Route path="/dashboard" element={<AdminDashboard />} />
+                    <Route path="admin/dashboard" element={<AdminDashboard />} />
                 </Routes>
             </main>
         </SidebarProvider>

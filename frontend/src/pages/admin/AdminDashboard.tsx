@@ -91,7 +91,6 @@ export default function AdminDashboard() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <AdminSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
             <AdminHeader activeSection={activeSection} />
             {renderContent()}
         </div>
