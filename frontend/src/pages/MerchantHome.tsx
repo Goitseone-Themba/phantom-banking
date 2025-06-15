@@ -24,7 +24,7 @@ export function MerchantHome() {
                     <Route path="/createwallet" element={<CreateWallet />} />
                     <Route path="/wallets" element={<Wallets />} />
                     <Route path="/payments" element={<Payments />} />
-                    <Route path="/reports" element={<Reports />} />
+
                     <Route path="/transactions" element={<Transactions />} />
                     <Route path="/settings" element={<Settings />} />
                 </Routes>

@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { MerchantHome } from "./pages/MerchantHome";
 import { CustomerHome } from "./pages/CustomerHome";
 import { AdminHome } from "./pages/AdminHome";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 function App() {
     return (
         <AuthProvider>
@@ -17,7 +18,7 @@ function App() {
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/forgotpassword" element={<ForgotPassword />} />
 
-                    <Route path="/admin" element={<AdminHome />} />
+                    <Route path="/admin" element={<AdminDashboard />} />
 
                     <Route element={<ProtectedRoute allowedRoles={["merchant"]} />}>
                         <Route path="/merchant" element={<MerchantHome />} />

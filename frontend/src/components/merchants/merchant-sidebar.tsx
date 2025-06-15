@@ -43,11 +43,7 @@ const items = [
         url: "/transactions",
         icon: Receipt,
     },
-    {
-        title: "Reports",
-        url: "/reports",
-        icon: ChartBar,
-    },
+
     {
         title: "Settings",
         url: "/settings",

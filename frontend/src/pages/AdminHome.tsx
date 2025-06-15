@@ -13,9 +13,7 @@ export function AdminHome() {
                     height: "auto",
                 }}
             >
-                <Routes>
-                    <Route path="admin/dashboard" element={<AdminDashboard />} />
-                </Routes>
+                <AdminDashboard />
             </main>
         </SidebarProvider>
     );

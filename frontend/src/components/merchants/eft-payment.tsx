@@ -22,6 +22,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 export function EftPayment() {
     const [accountNumber, setAccountNumber] = useState("");
@@ -147,12 +148,11 @@ export function PayBackViaEft() {
 
     const startEFTTransaction = function (e: any) {
         e ? e.preventDefault() : null;
-        if (accountNumber === "" || bankName === "" || amountDue === "") {
-            return;
-        }
+
+        alert("EFT Payment Done");
         // Testing Backend Error
-        setErrorDialogToOpen(true);
-        setEFTError("invalid card number");
+        // setErrorDialogToOpen(true);
+        // setEFTError("invalid card number");
     };
 
     return (
