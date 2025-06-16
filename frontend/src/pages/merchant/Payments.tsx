@@ -1,5 +1,5 @@
-import { EftPayment } from "@/components/eft-payment";
-import { PayViaQrCode } from "@/components/qr-code-payment";
+import { EftPayment, PayBackViaEft } from "@/components/merchants/eft-payment";
+import { DisburseViaQrCode, PayViaQrCode } from "@/components/merchants/qr-code-payment";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export function Payments() {
     return (
@@ -19,7 +19,12 @@ export function Payments() {
                     </div>
                 </TabsContent>
 
-                <TabsContent value="disburse">Somethind</TabsContent>
+                <TabsContent value="disburse">
+                    <div className="flex w-[inherit] flex-col gap-8 ">
+                        <DisburseViaQrCode></DisburseViaQrCode>
+                        <PayBackViaEft></PayBackViaEft>
+                    </div>
+                </TabsContent>
             </Tabs>
         </div>
     );

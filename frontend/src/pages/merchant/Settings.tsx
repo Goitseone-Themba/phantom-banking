@@ -1,4 +1,3 @@
-import APIUsageDashboard from "@/components/apikey-usage-graph";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,7 +25,7 @@ export function Settings() {
             description: "You are advised not to share it, and update all code reliant on it.",
             action: {
                 label: "Copy",
-                onclick: copyAPIKEY(),
+                onClick: copyAPIKEY(),
             },
         });
     };
