@@ -14,17 +14,18 @@ Phantom Banking is a Banking-as-a-Service (BaaS) platform that enables businesse
 
 ## ⚙️ Tech Stack
 
-| Layer       | Tools / Frameworks                                         |
-|-------------|------------------------------------------------------------|
-| Frontend    | React (Vite), Tailwind CSS, Axios                          |
-| Backend     | Django, Django REST Framework, PostgreSQL                  |
-| Documentation | Docusaurus (docs site), Swagger (API docs), Postman     |
-| Workflow / Automation | GitHub Projects, Git, BPMN (Camunda-ready)       |
-| UI Design   | Figma                                                      |
+| Layer                 | Tools / Frameworks                                  |
+| --------------------- | --------------------------------------------------- |
+| Frontend              | React (Vite), Tailwind CSS, Axios                   |
+| Backend               | Django, Django REST Framework, PostgreSQL           |
+| Documentation         | Docusaurus (docs site), Swagger (API docs), Postman |
+| Workflow / Automation | GitHub Projects, Git, BPMN (Camunda-ready)          |
+| UI Design             | Figma                                               |
 
 ---
 
 ## 📦 Monorepo Structure
+
 ```
 phantom-banking/
 ├── backend/ # Django backend (API, PostgreSQL)
@@ -45,30 +46,30 @@ Edit
 
 ## 🚀 MVP Features
 
-- 🔐 Business dashboard to manage embedded wallets and transactions
-- 📲 Multi-channel payment support: QR, EFT 
-- 🧩 API & SDK for integration into POS systems or apps
-- 🆙 KYC upgrade path to transition wallets into full FNB accounts
+-   🔐 Business dashboard to manage embedded wallets and transactions
+-   📲 Multi-channel payment support: QR, EFT
+-   🧩 API & SDK for integration into POS systems or apps
+-   🆙 KYC upgrade path to transition wallets into full FNB accounts
 
 ---
 
 ## 🔁 Future Integrations
 
-- ✅ KYC Verification Flow (Manual + API)
-- 🌐 Cross-border payments (regional expansion)
-- 🔄 Camunda BPMN workflows for scalable automation
+-   ✅ KYC Verification Flow (Manual + API)
+-   🌐 Cross-border payments (regional expansion)
+-   🔄 Camunda BPMN workflows for scalable automation
 
 ---
 
 ## 👥 Core Team
 
-| Name              | Role                          | Skills                                       |
-|-------------------|-------------------------------|----------------------------------------------|
-| Goitseone Themba  | Lead / Fullstack              | React, APIs, DevOps, Architecture            |
-| Bakang Kgopolo    | ML & Automation               | Python, ML, Instrumentation, Research        |
-| Thabo Mantsima    | Backend & Systems Integration | Django, Automation, Industrial Instrumentation|
-| Ernesto Mokgothu  | Data & Business Intelligence  | SQL, BI, Data Science, Design                |
-| Lebang Garebantsi | Security & Networking         | Fullstack, API Security, Network Admin       |
+| Name              | Role                          | Skills                                                           |
+| ----------------- | ----------------------------- | ---------------------------------------------------------------- |
+| Goitseone Themba  | Lead / Fullstack              | React, APIs, DevOps, Architecture                                |
+| Bakang Kgopolo    | ML & Automation               | Python, ML, Instrumentation, Research                            |
+| Thabo Mantsima    | Backend & Systems Integration | Django, Automation, Industrial Instrumentation                   |
+| Oarabile Koore    | Frontend                      | React, Typescript, Mobile App Dev with DroidScript, UI/UX Design |
+| Lebang Garebantsi | Security & Networking         | Fullstack, API Security, Network Admin                           |
 
 ---
 
@@ -82,6 +83,7 @@ Clone the repository:
 git clone https://github.com/Goitseone-Themba/phantom-banking.git
 cd phantom-banking
 ```
+
 📄 License
 This project is for educational and demo purposes for the FNB "Bank of the Future" Hackathon 2025. Commercial use requires approval from the core team and FNB Botswana.
 
