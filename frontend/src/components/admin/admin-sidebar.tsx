@@ -1,4 +1,4 @@
-import { ChartBar, Receipt, Home, Settings, Wallet, Users } from "lucide-react";
+import { ChartBar, Receipt, Home, Users } from "lucide-react";
 
 export function AdminSidebar({
     activeSection,

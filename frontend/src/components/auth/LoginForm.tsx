@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "@/services/auth";
 
-type LoginStage = "credentials" | "otp";
+
+type LoginStage = "credentials" | "otp" | "complete"
 
 export function LoginForm() {
     const navigate = useNavigate();
@@ -17,49 +18,32 @@ export function LoginForm() {
 
         const formData = new FormData(e.currentTarget);
         const data = {
-            email: formData.get("email") as string,
+            username: formData.get("username") as string,
             password: formData.get("password") as string,
         };
 
-        const login_credentials = logIn(data.email, data.password);
-
-        // // Fixed base URI - removed double slash
-        // const baseUri = "http://127.0.0.1:8000/api/v1";
-        // console.log(`Submitting login with data:`, JSON.stringify(data, null, 2));
-
-        // try {
-        //     const response = await fetch(`${baseUri}/auth/login/`, {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             // Removed the incorrect Access-Control-Allow-Headers
-        //         },
-        //         credentials: "include", // For CORS with credentials
-        //         body: JSON.stringify(data), // Send data in request body
-        //     });
-
-        //     if (response.ok) {
-        //         const responseData = await response.json();
-        //         console.log("Login response:", responseData);
-
-        //         if (responseData) {
-        //             setStage("otp");
-        //             // Navigate to the OTP verification page or handle accordingly
-        //             // navigate("/otp");
-        //         } else {
-        //             setError("Invalid credentials. Please try again.");
-        //         }
-        //     } else {
-        //         const errorResponse = await response.json();
-        //         console.error("Login error:", errorResponse);
-        //         setError(errorResponse.detail || "An error occurred. Please try again.");
-        //     }
-        // } catch (err) {
-        //     console.error("Network error during login request:", err);
-        //     setError("Network error. Please check your connection and try again.");
-        // } finally {
-        //     setIsLoading(false); // Always reset loading state
-        // }
+        const loginInfo = login({
+            username: data.username,
+            password: data.password
+        });
+        loginInfo.then((response) => {
+            setIsLoading(true)
+            if (response.success === true){
+                console.log("Login successful:", response);
+                if (response.data.user.is_mfa_enabled){
+                    setStage("complete")
+                } else {
+                    setStage("otp");
+                }
+            } else {
+                setError("Invalid credentials. Please try again.");
+            }
+        }).catch((error) => {   
+            console.error("Login error:", error);
+            setError(`An error occurred: ${error.message || "Please try again."}`);
+        }).finally(() => {
+            setIsLoading(false);
+        })
     };
 
     const handleOTPSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -107,7 +91,7 @@ export function LoginForm() {
                 <p className="text-muted-foreground">
                     {stage === "credentials"
                         ? "Enter your credentials to continue"
-                        : "Enter the 6-digit code sent to your email"}
+                        : "Enter the 6-digit code sent to your username"}
                 </p>
             </div>
 
@@ -119,18 +103,18 @@ export function LoginForm() {
                 <form onSubmit={handleCredentialsSubmit} className="space-y-4">
                     <div className="space-y-2">
                         <label
-                            htmlFor="email"
+                            htmlFor="username"
                             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
-                            Email
+                            Username
                         </label>
                         <input
-                            id="email"
-                            name="email"
-                            type="email"
+                            id="username"
+                            name="username"
+                            type="text"
                             required
                             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            placeholder="Enter your email"
+                            placeholder="Enter your username"
                             disabled={isLoading}
                         />
                     </div>

@@ -6,7 +6,6 @@ import { ProtectedRoute } from "./context/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { MerchantHome } from "./pages/MerchantHome";
 import { CustomerHome } from "./pages/CustomerHome";
-import { AdminHome } from "./pages/AdminHome";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 function App() {
     return (

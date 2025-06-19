@@ -1,27 +1,47 @@
 import axios from "axios";
 import { setTokens, clearTokens, getRefreshToken } from "@/lib/tokenStorage";
 
-interface LoginPayload {
-    email: string;
+export interface LoginPayload {
+    username: string;
     password: string;
 }
 
-interface OTPPayload {
+export interface OTPPayload {
     user_id: string;
     otp: string;
 }
 
-interface LoginResponse {
-    user_id: string;
-    message: string;
+export interface LoginResponse {
+  "success": boolean,
+  "message": string,
+  "data": {
+    "refresh": string,
+    "access": string,
+    "user": {
+      "id": number,
+      "username": string,
+      "email": string,
+      "first_name": string,
+      "last_name": string,
+      "user_type": string,
+      "is_active": boolean,
+      "is_email_verified": string | boolean,
+      "is_mfa_enabled": boolean,
+      "is_mfa_verified": boolean,
+      "requires_mfa_setup": boolean,
+      "created_at": Date,
+      "updated_at": Date,
+      "last_login": null
+    }
+  }
 }
 
-interface AuthTokens {
+export interface AuthTokens {
     access: string;
     refresh: string;
 }
 
-interface RegisterMerchantPayload {
+export interface RegisterMerchantPayload {
     business_name: string;
     registration_number: string;
     contact_email: string;
@@ -31,13 +51,13 @@ interface RegisterMerchantPayload {
     password: string;
     confirm_password: string;
 }
-const baseUri = "http://127.0.0.1:8000//api/v1";
+const baseUri = "http://127.0.0.1:8000/api";
 
 export async function login(payload: LoginPayload): Promise<LoginResponse> {
     const response = await axios.post(baseUri + "/auth/login/", payload, {
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Headers": "/login" },
+        headers: { "Content-Type": "application/json" },
     });
-    return response.data;
+    return response.data as Promise<LoginResponse>;
 }
 
 export async function verify2FA(payload: OTPPayload): Promise<AuthTokens> {

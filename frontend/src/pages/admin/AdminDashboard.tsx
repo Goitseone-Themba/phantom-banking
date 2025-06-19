@@ -76,6 +76,7 @@ export interface DashBoardStats {
 export default function AdminDashboard() {
     const [activeSection, setActiveSection] = useState<string>("dashboard");
     const renderContent = () => {
+        console.log("I was re-rendered proof: ");
         switch (activeSection) {
             case "users":
                 return <UserManagement users={users} />;
