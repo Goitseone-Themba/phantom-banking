@@ -1,14 +1,8 @@
 import axios from "axios";
-import { setTokens, clearTokens, getRefreshToken } from "@/lib/tokenStorage";
 
 export interface LoginPayload {
     username: string;
     password: string;
-}
-
-export interface OTPPayload {
-    user_id: string;
-    otp: string;
 }
 
 export interface LoginResponse {
@@ -23,7 +17,7 @@ export interface LoginResponse {
             email: string;
             first_name: string;
             last_name: string;
-            user_type: string;
+            user_type: "customer" | "merchant" | "admin";
             is_active: boolean;
             is_email_verified: string | boolean;
             is_mfa_enabled: boolean;
@@ -51,23 +45,17 @@ export interface RegisterMerchantPayload {
     password: string;
     confirm_password: string;
 }
+
 const baseUri = "http://127.0.0.1:8000/api";
 
-export async function login(payload: LoginPayload): Promise<LoginResponse> {
+async function login(payload: LoginPayload): Promise<LoginResponse> {
     const response = await axios.post(baseUri + "/auth/login/", payload, {
         headers: { "Content-Type": "application/json" },
     });
     return response.data as Promise<LoginResponse>;
 }
 
-export async function verify2FA(payload: OTPPayload): Promise<AuthTokens> {
-    const response = await axios.post("/auth/verify-2fa/", payload);
-    const { access, refresh } = response.data;
-    setTokens(access, refresh);
-    return { access, refresh };
-}
-
-export async function logout(): Promise<void> {
+async function logout(): Promise<void> {
     try {
         const refresh = getRefreshToken();
         if (!refresh) throw new Error("No refresh token found");
@@ -78,22 +66,22 @@ export async function logout(): Promise<void> {
     }
 }
 
-export async function registerMerchant(payload: RegisterMerchantPayload) {
+async function registerMerchant(payload: RegisterMerchantPayload) {
     const response = await axios.post("/auth/merchant_signup/", payload);
     return response.data;
 }
 
-export async function verifyEmail(token: string) {
+async function verifyEmail(token: string) {
     const response = await axios.post("/auth/verify-email/", { token });
     return response.data;
 }
 
-export async function requestPasswordReset(email: string) {
+async function requestPasswordReset(email: string) {
     const response = await axios.post("/auth/request_password_reset/", { email });
     return response.data;
 }
 
-export async function resetPassword(token: string, new_password: string, confirm_password: string) {
+async function resetPassword(token: string, new_password: string, confirm_password: string) {
     const response = await axios.post("/auth/reset_password/", {
         token,
         new_password,
@@ -102,7 +90,7 @@ export async function resetPassword(token: string, new_password: string, confirm
     return response.data;
 }
 
-export async function refreshToken(): Promise<string> {
+async function refreshToken(): Promise<string> {
     const refresh = getRefreshToken();
     if (!refresh) throw new Error("No refresh token available");
     const response = await axios.post("/auth/token/refresh/", { refresh });
@@ -127,10 +115,10 @@ function getRefreshToken() {
 
 export const auth = {
     login,
-    verify2FA,
     logout,
     registerMerchant,
     verifyEmail,
     requestPasswordReset,
     resetPassword,
+    refreshToken,
 };
