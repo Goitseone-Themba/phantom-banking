@@ -12,28 +12,28 @@ export interface OTPPayload {
 }
 
 export interface LoginResponse {
-  "success": boolean,
-  "message": string,
-  "data": {
-    "refresh": string,
-    "access": string,
-    "user": {
-      "id": number,
-      "username": string,
-      "email": string,
-      "first_name": string,
-      "last_name": string,
-      "user_type": string,
-      "is_active": boolean,
-      "is_email_verified": string | boolean,
-      "is_mfa_enabled": boolean,
-      "is_mfa_verified": boolean,
-      "requires_mfa_setup": boolean,
-      "created_at": Date,
-      "updated_at": Date,
-      "last_login": null
-    }
-  }
+    success: boolean;
+    message: string;
+    data: {
+        refresh: string;
+        access: string;
+        user: {
+            id: number;
+            username: string;
+            email: string;
+            first_name: string;
+            last_name: string;
+            user_type: string;
+            is_active: boolean;
+            is_email_verified: string | boolean;
+            is_mfa_enabled: boolean;
+            is_mfa_verified: boolean;
+            requires_mfa_setup: boolean;
+            created_at: Date;
+            updated_at: Date;
+            last_login: null;
+        };
+    };
 }
 
 export interface AuthTokens {

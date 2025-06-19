@@ -1,7 +1,6 @@
 import React from "react";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 
 export function LoginVerifyViaOtp() {
     const [otpCode, setOTPCode] = React.useState("");
